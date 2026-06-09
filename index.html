@@ -544,7 +544,7 @@ const CLIENTS = {
   async function loadActiveOrders() {
     setLoading("ao-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: "status=awaiting_fulfillment,allocated,printed,picked,ready_to_ship" });
+      const data = await veeqoFetch("/orders");
       state.activeOrders.all = data;
       state.activeOrders.filtered = [...data];
       renderActiveOrders();
