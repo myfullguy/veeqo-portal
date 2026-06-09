@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Clientes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --surface2: #1e1e24;
+      --border: #2a2a34;
+      --accent: #e8ff47;
+      --accent2: #47c8ff;
+      --text: #f0f0f0;
+      --muted: #6b6b80;
+      --danger: #ff4747;
+      --success: #47ffb2;
+      --warning: #ffb347;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-badge span {
+      color: var(--success);
+    }
+
+    /* TABS */
+    nav {
+      padding: 0 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 0;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* MAIN */
+    main {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.15s;
+      min-width: 240px;
+    }
+
+    .search-box:focus { border-color: var(--accent); }
+    .search-box::placeholder { color: var(--muted); }
+
+    select.filter-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    select.filter-select:focus { border-color: var(--accent); }
+
+    .btn-refresh {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+      margin-left: auto;
+    }
+
+    .btn-refresh:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.2rem;
+      border-radius: 6px;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    /* TABLE */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead tr {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      font-size: 0.78rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: var(--surface2); }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .badge-success { background: rgba(71,255,178,0.12); color: var(--success); }
+    .badge-warning { background: rgba(255,179,71,0.12); color: var(--warning); }
+    .badge-danger  { background: rgba(255,71,71,0.12);  color: var(--danger);  }
+    .badge-info    { background: rgba(71,200,255,0.12); color: var(--accent2); }
+    .badge-muted   { background: rgba(107,107,128,0.15); color: var(--muted); }
+
+    /* STOCK INDICATOR */
+    .stock-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .stock-bar {
+      height: 4px;
+      width: 60px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .stock-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* LOADING */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* SECTIONS */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .row-anim { animation: fadeIn 0.25s ease forwards; }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 1rem 0 0;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .page-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ERROR */
+    .error-banner {
+      background: rgba(255,71,71,0.08);
+      border: 1px solid rgba(255,71,71,0.3);
+      color: var(--danger);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+      font-size: 0.78rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Portal de Clientes
+  </div>
+  <div class="status-badge">LIVE <span>●</span></div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchTab('inventory')">Inventario</button>
+  <button class="tab-btn" onclick="switchTab('active-orders')">Órdenes Activas</button>
+  <button class="tab-btn" onclick="switchTab('history')">Historial</button>
+</nav>
+
+<main>
+  <div id="error-container"></div>
+
+  <!-- =================== INVENTARIO =================== -->
+  <section id="inventory" class="section active">
+    <div class="toolbar">
+      <input class="search-box" type="text" placeholder="Buscar producto o SKU..." oninput="filterInventory()" id="inv-search" />
+      <select class="filter-select" id="brand-filter" onchange="filterInventory()">
+        <option value="">Todas las marcas</option>
+      </select>
+      <button class="btn-refresh" onclick="loadInventory()">↺ Actualizar</button>
+    </div>
+
+    <div class="stats-row" id="inv-stats"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>SKU</th>
+            <th>Marca</th>
+            <th>Stock disponible</th>
+            <th>Estado</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tbody id="inv-body">
+          <tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Cargando inventario...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="inv-pagination"></div>
+  </section>
+
+  <!-- =================== ÓRDENES ACTIVAS =================== -->
+  <section id="active-orders" class="section">
+    <div class="toolbar">
+      <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterActiveOrders()" id="ao-search" />
+      <select class="filter-select" id="ao-status-filter" onchange="filterActiveOrders()">
+        <option value="">Todos los estados</option>
+        <option value="awaiting_fulfillment">Esperando fulfillment</option>
+        <option value="allocated">Alocado</option>
+        <option value="printed">Impreso</option>
+        <option value="picked">Picked</option>
+        <option value="ready_to_ship">Listo para envío</option>
+      </select>
+      <button class="btn-refresh" onclick="loadActiveOrders()">↺ Actualizar</button>
+    </div>
+
+    <div class="stats-row" id="ao-stats"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Canal</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="ao-body">
+          <tr><td colspan="7"><div class="loading-state"><div class="spinner"></div>Cargando órdenes...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="ao-pagination"></div>
+  </section>
+
+  <!-- =================== HISTORIAL =================== -->
+  <section id="history" class="section">
+    <div class="toolbar">
+      <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterHistory()" id="hist-search" />
+      <select class="filter-select" id="hist-status-filter" onchange="filterHistory()">
+        <option value="">Todos</option>
+        <option value="shipped">Enviados</option>
+        <option value="delivered">Entregados</option>
+        <option value="cancelled">Cancelados</option>
+        <option value="refunded">Reembolsados</option>
+      </select>
+      <button class="btn-refresh" onclick="loadHistory()">↺ Actualizar</button>
+    </div>
+
+    <div class="stats-row" id="hist-stats"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Canal</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="hist-body">
+          <tr><td colspan="7"><div class="loading-state"><div class="spinner"></div>Cargando historial...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="hist-pagination"></div>
+  </section>
+</main>
+
+<script>
+  // =================== CONFIG ===================
+  const API = "/.netlify/functions/veeqo";
+  const PAGE_SIZE = 50;
+
+  // =================== STATE ===================
+  let state = {
+    inventory: { all: [], filtered: [], page: 1, brands: [] },
+    activeOrders: { all: [], filtered: [], page: 1 },
+    history:      { all: [], filtered: [], page: 1 },
+  };
+
+  // =================== FETCH ===================
+  async function veeqoFetch(endpoint, params = {}) {
+    const qs = new URLSearchParams({ endpoint, ...params }).toString();
+    const res = await fetch(`${API}?${qs}`);
+    if (!res.ok) throw new Error(`Error ${res.status}`);
+    return res.json();
+  }
+
+  function showError(msg) {
+    document.getElementById("error-container").innerHTML =
+      `<div class="error-banner">⚠ ${msg}</div>`;
+    setTimeout(() => document.getElementById("error-container").innerHTML = "", 6000);
+  }
+
+  // =================== TABS ===================
+  function switchTab(tab) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById(tab).classList.add("active");
+    event.target.classList.add("active");
+
+    if (tab === "active-orders" && state.activeOrders.all.length === 0) loadActiveOrders();
+    if (tab === "history" && state.history.all.length === 0) loadHistory();
+  }
+
+  // =================== INVENTORY ===================
+  async function loadInventory() {
+    setLoading("inv-body", 6);
+    try {
+      const data = await veeqoFetch("/products", { params: `page_size=100&page=1` });
+      state.inventory.all = data;
+      buildBrandFilter(data);
+      filterInventory();
+      renderInvStats(data);
+    } catch(e) { showError("No se pudo cargar el inventario: " + e.message); }
+  }
+
+  function buildBrandFilter(products) {
+    const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
+    state.inventory.brands = brands;
+    const sel = document.getElementById("brand-filter");
+    sel.innerHTML = `<option value="">Todas las marcas</option>` +
+      brands.map(b => `<option value="${b}">${b}</option>`).join("");
+  }
+
+  function filterInventory() {
+    const search = document.getElementById("inv-search").value.toLowerCase();
+    const brand  = document.getElementById("brand-filter").value;
+    state.inventory.filtered = state.inventory.all.filter(p => {
+      const matchSearch = !search ||
+        p.title?.toLowerCase().includes(search) ||
+        p.variants?.some(v => v.sku?.toLowerCase().includes(search));
+      const matchBrand = !brand || p.brand?.name === brand;
+      return matchSearch && matchBrand;
+    });
+    state.inventory.page = 1;
+    renderInventory();
+  }
+
+  function renderInventory() {
+    const { filtered, page } = state.inventory;
+    const paged = paginate(filtered, page);
+    const body = document.getElementById("inv-body");
+
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="6"><div class="empty-state">Sin resultados</div></td></tr>`;
+      document.getElementById("inv-pagination").innerHTML = "";
+      return;
+    }
+
+    body.innerHTML = paged.map((p, i) => {
+      const variant = p.variants?.[0] || {};
+      const stock = variant.stock_entries?.reduce((sum, s) => sum + (s.quantity || 0), 0) ?? "–";
+      const price = variant.price != null ? `$${parseFloat(variant.price).toFixed(2)}` : "–";
+      const sku = variant.sku || "–";
+      const stockNum = typeof stock === "number" ? stock : 0;
+      const pct = Math.min(100, Math.max(0, (stockNum / 100) * 100));
+      const color = stockNum === 0 ? "var(--danger)" : stockNum < 10 ? "var(--warning)" : "var(--success)";
+      const badge = stockNum === 0
+        ? `<span class="badge badge-danger">Sin stock</span>`
+        : stockNum < 10
+          ? `<span class="badge badge-warning">Stock bajo</span>`
+          : `<span class="badge badge-success">En stock</span>`;
+
+      return `<tr class="row-anim" style="animation-delay:${i * 0.02}s">
+        <td>${p.title || "–"}</td>
+        <td style="color:var(--muted)">${sku}</td>
+        <td>${p.brand?.name || "–"}</td>
+        <td>
+          <div class="stock-bar-wrap">
+            <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${color}"></div></div>
+            ${stockNum}
+          </div>
+        </td>
+        <td>${badge}</td>
+        <td style="color:var(--accent)">${price}</td>
+      </tr>`;
+    }).join("");
+
+    renderPagination("inv-pagination", filtered.length, page, (p) => {
+      state.inventory.page = p; renderInventory();
+    });
+  }
+
+  function renderInvStats(products) {
+    const totalVariants = products.reduce((s, p) => s + (p.variants?.length || 0), 0);
+    const totalStock = products.reduce((s, p) =>
+      s + (p.variants?.reduce((vs, v) =>
+        vs + (v.stock_entries?.reduce((ss, se) => ss + (se.quantity || 0), 0) || 0), 0) || 0), 0);
+    const outOfStock = products.filter(p =>
+      p.variants?.every(v => v.stock_entries?.reduce((s, se) => s + (se.quantity || 0), 0) === 0)).length;
+
+    document.getElementById("inv-stats").innerHTML = `
+      <div class="stat-card"><div class="stat-label">Productos</div><div class="stat-value" style="color:var(--accent)">${products.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Variantes</div><div class="stat-value" style="color:var(--accent2)">${totalVariants}</div></div>
+      <div class="stat-card"><div class="stat-label">Unidades totales</div><div class="stat-value">${totalStock}</div></div>
+      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value" style="color:var(--danger)">${outOfStock}</div></div>
+    `;
+  }
+
+  // =================== ORDERS SHARED ===================
+  function orderRow(o, i) {
+    const num = o.number || o.id || "–";
+    const customer = o.deliver_to?.first_name
+      ? `${o.deliver_to.first_name} ${o.deliver_to.last_name || ""}`.trim()
+      : o.customer?.email || "–";
+    const items = o.line_items?.length ?? "–";
+    const total = o.total_price != null ? `$${parseFloat(o.total_price).toFixed(2)}` : "–";
+    const channel = o.channel?.name || "–";
+    const statusRaw = o.status || "–";
+    const badge = statusBadge(statusRaw);
+    const date = o.created_at ? new Date(o.created_at).toLocaleDateString("es-AR") : "–";
+
+    return `<tr class="row-anim" style="animation-delay:${i * 0.02}s">
+      <td style="color:var(--accent2);font-weight:500">#${num}</td>
+      <td>${customer}</td>
+      <td>${items}</td>
+      <td style="color:var(--accent)">${total}</td>
+      <td style="color:var(--muted)">${channel}</td>
+      <td>${badge}</td>
+      <td style="color:var(--muted)">${date}</td>
+    </tr>`;
+  }
+
+  function statusBadge(s) {
+    const map = {
+      awaiting_fulfillment: ["badge-warning", "Esperando"],
+      allocated: ["badge-info", "Alocado"],
+      printed: ["badge-info", "Impreso"],
+      picked: ["badge-info", "Picked"],
+      ready_to_ship: ["badge-success", "Listo"],
+      shipped: ["badge-success", "Enviado"],
+      delivered: ["badge-success", "Entregado"],
+      cancelled: ["badge-danger", "Cancelado"],
+      refunded: ["badge-muted", "Reembolsado"],
+    };
+    const [cls, label] = map[s] || ["badge-muted", s];
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+
+  function orderStats(orders, containerId) {
+    const total = orders.length;
+    const revenue = orders.reduce((s, o) => s + parseFloat(o.total_price || 0), 0);
+    const items = orders.reduce((s, o) => s + (o.line_items?.length || 0), 0);
+    document.getElementById(containerId).innerHTML = `
+      <div class="stat-card"><div class="stat-label">Órdenes</div><div class="stat-value" style="color:var(--accent)">${total}</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue total</div><div class="stat-value" style="color:var(--success)">$${revenue.toFixed(0)}</div></div>
+      <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${items}</div></div>
+    `;
+  }
+
+  // =================== ACTIVE ORDERS ===================
+  const ACTIVE_STATUSES = "awaiting_fulfillment,allocated,printed,picked,ready_to_ship";
+
+  async function loadActiveOrders() {
+    setLoading("ao-body", 7);
+    try {
+      const data = await veeqoFetch("/orders", { params: `status=${ACTIVE_STATUSES}&page_size=100&page=1` });
+      state.activeOrders.all = data;
+      filterActiveOrders();
+      orderStats(data, "ao-stats");
+    } catch(e) { showError("No se pudo cargar órdenes activas: " + e.message); }
+  }
+
+  function filterActiveOrders() {
+    const search = document.getElementById("ao-search").value.toLowerCase();
+    const status = document.getElementById("ao-status-filter").value;
+    state.activeOrders.filtered = state.activeOrders.all.filter(o => {
+      const matchSearch = !search ||
+        String(o.number).includes(search) ||
+        o.deliver_to?.first_name?.toLowerCase().includes(search) ||
+        o.customer?.email?.toLowerCase().includes(search);
+      const matchStatus = !status || o.status === status;
+      return matchSearch && matchStatus;
+    });
+    state.activeOrders.page = 1;
+    renderActiveOrders();
+  }
+
+  function renderActiveOrders() {
+    const { filtered, page } = state.activeOrders;
+    const paged = paginate(filtered, page);
+    const body = document.getElementById("ao-body");
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin órdenes activas</div></td></tr>`;
+      document.getElementById("ao-pagination").innerHTML = "";
+      return;
+    }
+    body.innerHTML = paged.map(orderRow).join("");
+    renderPagination("ao-pagination", filtered.length, page, (p) => {
+      state.activeOrders.page = p; renderActiveOrders();
+    });
+  }
+
+  // =================== HISTORY ===================
+  const HISTORY_STATUSES = "shipped,delivered,cancelled,refunded";
+
+  async function loadHistory() {
+    setLoading("hist-body", 7);
+    try {
+      const data = await veeqoFetch("/orders", { params: `status=${HISTORY_STATUSES}&page_size=100&page=1` });
+      state.history.all = data;
+      filterHistory();
+      orderStats(data, "hist-stats");
+    } catch(e) { showError("No se pudo cargar el historial: " + e.message); }
+  }
+
+  function filterHistory() {
+    const search = document.getElementById("hist-search").value.toLowerCase();
+    const status = document.getElementById("hist-status-filter").value;
+    state.history.filtered = state.history.all.filter(o => {
+      const matchSearch = !search ||
+        String(o.number).includes(search) ||
+        o.deliver_to?.first_name?.toLowerCase().includes(search) ||
+        o.customer?.email?.toLowerCase().includes(search);
+      const matchStatus = !status || o.status === status;
+      return matchSearch && matchStatus;
+    });
+    state.history.page = 1;
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const { filtered, page } = state.history;
+    const paged = paginate(filtered, page);
+    const body = document.getElementById("hist-body");
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin historial</div></td></tr>`;
+      document.getElementById("hist-pagination").innerHTML = "";
+      return;
+    }
+    body.innerHTML = paged.map(orderRow).join("");
+    renderPagination("hist-pagination", filtered.length, page, (p) => {
+      state.history.page = p; renderHistory();
+    });
+  }
+
+  // =================== HELPERS ===================
+  function paginate(arr, page) {
+    return arr.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  }
+
+  function renderPagination(containerId, total, page, onPage) {
+    const pages = Math.ceil(total / PAGE_SIZE);
+    if (pages <= 1) { document.getElementById(containerId).innerHTML = ""; return; }
+    document.getElementById(containerId).innerHTML = `
+      <span>${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE, total)} de ${total}</span>
+      <button class="page-btn" onclick="(${onPage})(${page-1})" ${page===1?"disabled":""}>← Anterior</button>
+      <button class="page-btn" onclick="(${onPage})(${page+1})" ${page===pages?"disabled":""}>Siguiente →</button>
+    `;
+  }
+
+  function setLoading(tbodyId, cols) {
+    document.getElementById(tbodyId).innerHTML =
+      `<tr><td colspan="${cols}"><div class="loading-state"><div class="spinner"></div>Cargando...</div></td></tr>`;
+  }
+
+  // =================== INIT ===================
+  loadInventory();
+</script>
+</body>
+</html>
