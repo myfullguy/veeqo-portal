@@ -6,231 +6,148 @@
   <title>MyFullGuy — Portal de Clientes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="/clients.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #f7f7f5;
-      --white: #ffffff;
-      --border: #e5e5e0;
-      --border2: #d0d0c8;
-      --blue: #2563eb;
-      --blue-light: #eff6ff;
-      --text: #1a1a1a;
-      --muted: #6b7280;
-      --muted2: #9ca3af;
-      --danger: #dc2626;
-      --danger-light: #fef2f2;
-      --success: #16a34a;
-      --success-light: #f0fdf4;
-      --warning: #d97706;
-      --warning-light: #fffbeb;
+      --bg: #f7f7f5; --white: #ffffff; --border: #e5e5e0; --border2: #d0d0c8;
+      --blue: #2563eb; --blue-light: #eff6ff;
+      --text: #1a1a1a; --muted: #6b7280; --muted2: #9ca3af;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --success: #16a34a; --success-light: #f0fdf4;
+      --warning: #d97706; --warning-light: #fffbeb;
+      --purple: #7c3aed; --purple-light: #f5f3ff;
       --font: 'Inter', sans-serif;
       --font-display: 'Playfair Display', serif;
       --radius: 8px;
       --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.5;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
+    /* ACCESS SCREEN */
+    #access-screen {
+      display: none; position: fixed; inset: 0;
+      background: var(--bg); z-index: 1000;
+      align-items: center; justify-content: center;
     }
-
-    header {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow);
+    #access-screen.show { display: flex; }
+    .access-box {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2.5rem; width: 360px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;
     }
+    .access-logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .access-logo span { color: var(--blue); }
+    .access-sub { color: var(--muted); font-size: 13px; margin-bottom: 2rem; }
+    .access-input {
+      width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 10px 14px; font-family: var(--font); font-size: 14px;
+      outline: none; margin-bottom: 1rem; transition: border-color .15s;
+    }
+    .access-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+    .access-btn {
+      width: 100%; background: var(--blue); color: white; border: none;
+      border-radius: var(--radius); padding: 10px; font-family: var(--font);
+      font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
+    }
+    .access-btn:hover { background: #1d4ed8; }
+    .access-error { color: var(--danger); font-size: 12px; margin-top: 0.5rem; display: none; }
 
+    /* HEADER */
+    header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
     .logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
     .logo span { color: var(--blue); }
-
-    .live-badge {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--success); font-weight: 500;
-    }
-    .live-dot {
-      width: 7px; height: 7px; background: var(--success);
-      border-radius: 50%; animation: pulse 2s ease-in-out infinite;
-    }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .client-name { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--bg); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); font-weight: 500; }
+    .live-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    nav {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-    }
-
-    .tab-btn {
-      background: none; border: none;
-      border-bottom: 2px solid transparent;
-      color: var(--muted);
-      font-family: var(--font); font-size: 13px; font-weight: 500;
-      padding: 14px 20px; cursor: pointer;
-      transition: all 0.15s; margin-bottom: -1px;
-    }
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; }
+    .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); font-family: var(--font); font-size: 13px; font-weight: 500; padding: 14px 20px; cursor: pointer; transition: all .15s; margin-bottom: -1px; }
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-    main { padding: 2rem; max-width: 1300px; margin: 0 auto; }
+    main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
 
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem; margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      box-shadow: var(--shadow); animation: fadeUp 0.3s ease forwards;
-    }
-    .stat-label {
-      font-size: 11px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--muted2); margin-bottom: 6px;
-    }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); animation: fadeUp .3s ease forwards; }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted2); margin-bottom: 6px; }
     .stat-value { font-size: 2rem; font-weight: 600; line-height: 1; }
-    .c-blue { color: var(--blue); }
-    .c-green { color: var(--success); }
-    .c-red { color: var(--danger); }
-    .c-orange { color: var(--warning); }
+    .c-blue{color:var(--blue)} .c-green{color:var(--success)} .c-red{color:var(--danger)} .c-orange{color:var(--warning)} .c-purple{color:var(--purple)}
 
-    .toolbar {
-      display: flex; gap: .75rem; margin-bottom: 1rem;
-      align-items: center; flex-wrap: wrap;
-    }
-
-    .search-box {
-      background: var(--white); border: 1px solid var(--border);
-      color: var(--text); font-family: var(--font); font-size: 13px;
-      padding: 8px 12px 8px 34px; border-radius: var(--radius);
-      outline: none; transition: border-color .15s, box-shadow .15s;
-      min-width: 220px; box-shadow: var(--shadow);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: 10px center;
-    }
+    .toolbar { display: flex; gap: .75rem; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
+    .search-box { background: var(--white); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 13px; padding: 8px 12px 8px 34px; border-radius: var(--radius); outline: none; transition: border-color .15s, box-shadow .15s; min-width: 220px; box-shadow: var(--shadow); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 10px center; }
     .search-box:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
     .search-box::placeholder { color: var(--muted2); }
-
-    select.filter-select {
-      background: var(--white); border: 1px solid var(--border);
-      color: var(--text); font-family: var(--font); font-size: 13px;
-      padding: 8px 12px; border-radius: var(--radius);
-      outline: none; cursor: pointer; box-shadow: var(--shadow);
-    }
-    select.filter-select:focus { border-color: var(--blue); }
-
-    .btn-refresh {
-      background: var(--white); border: 1px solid var(--border);
-      color: var(--muted); font-family: var(--font); font-size: 12px; font-weight: 500;
-      padding: 8px 14px; border-radius: var(--radius);
-      cursor: pointer; transition: all .15s; box-shadow: var(--shadow); margin-left: auto;
-    }
+    select.filter-select { background: var(--white); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 13px; padding: 8px 12px; border-radius: var(--radius); outline: none; cursor: pointer; box-shadow: var(--shadow); }
+    .btn-refresh { background: var(--white); border: 1px solid var(--border); color: var(--muted); font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: var(--radius); cursor: pointer; transition: all .15s; box-shadow: var(--shadow); margin-left: auto; }
     .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
 
-    .table-wrap {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
-    }
-
+    .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     table { width: 100%; border-collapse: collapse; }
-
     thead tr { background: #fafafa; border-bottom: 1px solid var(--border); }
-
-    th {
-      font-size: 11px; font-weight: 600; letter-spacing: .05em;
-      text-transform: uppercase; color: var(--muted2);
-      padding: 11px 16px; text-align: left;
-      cursor: pointer; user-select: none; white-space: nowrap;
-      transition: color .15s;
-    }
+    th { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted2); padding: 11px 16px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; transition: color .15s; }
     th:hover { color: var(--text); }
-    th .sort-icon { margin-left: 4px; opacity: .4; font-style: normal; }
-    th.sort-asc .sort-icon, th.sort-desc .sort-icon { opacity: 1; color: var(--blue); }
-
-    td {
-      padding: 12px 16px; font-size: 13px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
+    th i { margin-left: 4px; opacity: .4; font-style: normal; }
+    th.sort-asc i, th.sort-desc i { opacity: 1; color: var(--blue); }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafafa; }
-
     .td-muted { color: var(--muted); }
     .td-mono { font-family: 'Courier New', monospace; font-size: 12px; color: var(--muted); }
 
-    .badge {
-      display: inline-flex; align-items: center;
-      padding: 3px 8px; border-radius: 20px;
-      font-size: 11px; font-weight: 600;
-    }
-    .badge-success { background: var(--success-light); color: var(--success); }
-    .badge-warning { background: var(--warning-light); color: var(--warning); }
-    .badge-danger  { background: var(--danger-light);  color: var(--danger); }
-    .badge-blue    { background: var(--blue-light);    color: var(--blue); }
-    .badge-muted   { background: #f3f4f6; color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-success{background:var(--success-light);color:var(--success)}
+    .badge-warning{background:var(--warning-light);color:var(--warning)}
+    .badge-danger{background:var(--danger-light);color:var(--danger)}
+    .badge-blue{background:var(--blue-light);color:var(--blue)}
+    .badge-purple{background:var(--purple-light);color:var(--purple)}
+    .badge-muted{background:#f3f4f6;color:var(--muted)}
 
-    .stock-cell { display: flex; align-items: center; gap: 10px; }
-    .stock-num { font-weight: 600; min-width: 28px; }
-    .stock-bar { height: 5px; width: 60px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .stock-fill { height: 100%; border-radius: 99px; transition: width .4s ease; }
+    /* STOCK CELLS */
+    .stock-cell { display: flex; align-items: center; gap: 8px; }
+    .stock-num { font-weight: 600; min-width: 28px; font-size: 13px; }
+    .stock-bar { height: 4px; width: 48px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+    .stock-fill { height: 100%; border-radius: 99px; }
+    .stock-zero { color: var(--muted2); font-size: 12px; }
 
-    .loading-state, .empty-state {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 4rem 2rem; gap: 12px;
-      color: var(--muted); font-size: 13px;
-    }
-    .spinner {
-      width: 28px; height: 28px;
-      border: 2px solid var(--border); border-top-color: var(--blue);
-      border-radius: 50%; animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-state, .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 12px; color: var(--muted); font-size: 13px; }
+    .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to{transform:rotate(360deg)} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
     .section { display: none; }
     .section.active { display: block; }
 
-    .pagination {
-      display: flex; gap: 6px; align-items: center;
-      justify-content: flex-end; padding: 14px 0 0;
-      font-size: 12px; color: var(--muted);
-    }
-    .page-btn {
-      background: var(--white); border: 1px solid var(--border);
-      color: var(--text); font-family: var(--font); font-size: 12px; font-weight: 500;
-      padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all .15s;
-    }
+    .pagination { display: flex; gap: 6px; align-items: center; justify-content: flex-end; padding: 14px 0 0; font-size: 12px; color: var(--muted); }
+    .page-btn { background: var(--white); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all .15s; }
     .page-btn:hover { border-color: var(--blue); color: var(--blue); }
     .page-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-    .error-banner {
-      background: var(--danger-light); border: 1px solid #fecaca;
-      color: var(--danger); border-radius: var(--radius);
-      padding: 10px 14px; font-size: 13px; margin-bottom: 1rem;
-    }
+    .error-banner { background: var(--danger-light); border: 1px solid #fecaca; color: var(--danger); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
 
+<!-- ACCESS SCREEN -->
+<div id="access-screen" class="show">
+  <div class="access-box">
+    <div class="access-logo">MyFullGuy <span>·</span> Portal</div>
+    <div class="access-sub">Ingresá tu código de acceso</div>
+    <input class="access-input" type="password" id="token-input" placeholder="Código de acceso..." onkeydown="if(event.key==='Enter')checkToken()" />
+    <button class="access-btn" onclick="checkToken()">Ingresar</button>
+    <div class="access-error" id="access-error">Código incorrecto. Contactá a MyFullGuy.</div>
+  </div>
+</div>
+
+<!-- APP -->
 <header>
   <div class="logo">MyFullGuy <span>·</span> Portal</div>
-  <div class="live-badge"><div class="live-dot"></div> En vivo</div>
+  <div class="header-right">
+    <span class="client-name" id="client-name-badge"></span>
+    <div class="live-badge"><div class="live-dot"></div> En vivo</div>
+  </div>
 </header>
 
 <nav>
@@ -256,15 +173,16 @@
       <table>
         <thead>
           <tr>
-            <th onclick="sortInv('title')">Producto <i class="sort-icon" id="si-title">↕</i></th>
-            <th onclick="sortInv('sku')">SKU <i class="sort-icon" id="si-sku">↕</i></th>
-            <th onclick="sortInv('brand')">Marca <i class="sort-icon" id="si-brand">↕</i></th>
-            <th onclick="sortInv('stock')">Stock <i class="sort-icon" id="si-stock">↕</i></th>
-            <th onclick="sortInv('status')">Estado <i class="sort-icon" id="si-status">↕</i></th>
+            <th onclick="sortInv('title')">Producto <i id="si-title">↕</i></th>
+            <th onclick="sortInv('sku')">SKU <i id="si-sku">↕</i></th>
+            <th onclick="sortInv('brand')">Marca <i id="si-brand">↕</i></th>
+            <th onclick="sortInv('mfg')">MyFullGuy <i id="si-mfg">↕</i></th>
+            <th onclick="sortInv('fba')">Amazon FBA <i id="si-fba">↕</i></th>
+            <th onclick="sortInv('total')">Total <i id="si-total">↕</i></th>
           </tr>
         </thead>
         <tbody id="inv-body">
-          <tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Cargando inventario...</div></td></tr>
+          <tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Cargando inventario...</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -290,13 +208,13 @@
       <table>
         <thead>
           <tr>
-            <th onclick="sortOrders('ao','number')"># <i class="sort-icon" id="ao-si-number">↕</i></th>
-            <th onclick="sortOrders('ao','customer')">Cliente <i class="sort-icon" id="ao-si-customer">↕</i></th>
-            <th onclick="sortOrders('ao','items')">Items <i class="sort-icon" id="ao-si-items">↕</i></th>
-            <th onclick="sortOrders('ao','total')">Total <i class="sort-icon" id="ao-si-total">↕</i></th>
-            <th onclick="sortOrders('ao','channel')">Canal <i class="sort-icon" id="ao-si-channel">↕</i></th>
-            <th onclick="sortOrders('ao','status')">Estado <i class="sort-icon" id="ao-si-status">↕</i></th>
-            <th onclick="sortOrders('ao','date')">Fecha <i class="sort-icon" id="ao-si-date">↕</i></th>
+            <th onclick="sortOrders('ao','number')"># <i id="ao-si-number">↕</i></th>
+            <th onclick="sortOrders('ao','customer')">Cliente <i id="ao-si-customer">↕</i></th>
+            <th onclick="sortOrders('ao','items')">Items <i id="ao-si-items">↕</i></th>
+            <th onclick="sortOrders('ao','total')">Total <i id="ao-si-total">↕</i></th>
+            <th onclick="sortOrders('ao','channel')">Canal <i id="ao-si-channel">↕</i></th>
+            <th onclick="sortOrders('ao','status')">Estado <i id="ao-si-status">↕</i></th>
+            <th onclick="sortOrders('ao','date')">Fecha <i id="ao-si-date">↕</i></th>
           </tr>
         </thead>
         <tbody id="ao-body">
@@ -325,13 +243,13 @@
       <table>
         <thead>
           <tr>
-            <th onclick="sortOrders('hist','number')"># <i class="sort-icon" id="hist-si-number">↕</i></th>
-            <th onclick="sortOrders('hist','customer')">Cliente <i class="sort-icon" id="hist-si-customer">↕</i></th>
-            <th onclick="sortOrders('hist','items')">Items <i class="sort-icon" id="hist-si-items">↕</i></th>
-            <th onclick="sortOrders('hist','total')">Total <i class="sort-icon" id="hist-si-total">↕</i></th>
-            <th onclick="sortOrders('hist','channel')">Canal <i class="sort-icon" id="hist-si-channel">↕</i></th>
-            <th onclick="sortOrders('hist','status')">Estado <i class="sort-icon" id="hist-si-status">↕</i></th>
-            <th onclick="sortOrders('hist','date')">Fecha <i class="sort-icon" id="hist-si-date">↕</i></th>
+            <th onclick="sortOrders('hist','number')"># <i id="hist-si-number">↕</i></th>
+            <th onclick="sortOrders('hist','customer')">Cliente <i id="hist-si-customer">↕</i></th>
+            <th onclick="sortOrders('hist','items')">Items <i id="hist-si-items">↕</i></th>
+            <th onclick="sortOrders('hist','total')">Total <i id="hist-si-total">↕</i></th>
+            <th onclick="sortOrders('hist','channel')">Canal <i id="hist-si-channel">↕</i></th>
+            <th onclick="sortOrders('hist','status')">Estado <i id="hist-si-status">↕</i></th>
+            <th onclick="sortOrders('hist','date')">Fecha <i id="hist-si-date">↕</i></th>
           </tr>
         </thead>
         <tbody id="hist-body">
@@ -346,12 +264,44 @@
 <script>
   const API = "/.netlify/functions/veeqo";
   const PAGE_SIZE = 50;
+  let currentClient = null;
 
   let state = {
-    inventory:    { all: [], filtered: [], page: 1, sortKey: '', sortDir: 1 },
-    activeOrders: { all: [], filtered: [], page: 1, sortKey: '', sortDir: 1 },
-    history:      { all: [], filtered: [], page: 1, sortKey: '', sortDir: 1 },
+    inventory:    { all: [], filtered: [], page: 1, sortKey: '', sortDir: -1 },
+    activeOrders: { all: [], filtered: [], page: 1, sortKey: '', sortDir: -1 },
+    history:      { all: [], filtered: [], page: 1, sortKey: '', sortDir: -1 },
   };
+
+  // ── AUTH ───────────────────────────────────────────
+  function checkToken() {
+    const token = document.getElementById("token-input").value.trim();
+    const client = CLIENTS[token];
+    if (!client) {
+      document.getElementById("access-error").style.display = "block";
+      return;
+    }
+    currentClient = client;
+    document.getElementById("access-screen").classList.remove("show");
+    document.getElementById("client-name-badge").textContent = client.name;
+    loadInventory();
+  }
+
+  // Check URL token on load
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token && CLIENTS[token]) {
+      document.getElementById("token-input").value = token;
+      checkToken();
+    }
+  });
+
+  // ── CLIENT FILTER ──────────────────────────────────
+  function clientFilter(product) {
+    if (!currentClient || currentClient.admin) return true;
+    if (!currentClient.brands || currentClient.brands.length === 0) return true;
+    return currentClient.brands.includes(product.brand?.name);
+  }
 
   // ── FETCH ──────────────────────────────────────────
   async function veeqoFetch(endpoint, params = {}) {
@@ -377,73 +327,98 @@
     if (tab === "history" && state.history.all.length === 0) loadHistory();
   }
 
-  // ── INVENTORY HELPERS ──────────────────────────────
-  function getProductStock(product) {
-    // Sum stock_level_at_all_warehouses across all sellables
-    if (product.sellables && product.sellables.length > 0) {
-      return product.sellables.reduce((sum, s) => sum + (s.stock_level_at_all_warehouses || 0), 0);
-    }
-    // Fallback to top-level fields
-    return product.total_available_stock_level ?? product.total_stock_level ?? 0;
+  // ── STOCK HELPERS ──────────────────────────────────
+  function getWarehouseStock(sellable, type) {
+    if (!sellable.stock_entries) return 0;
+    return sellable.stock_entries
+      .filter(e => {
+        const name = (e.warehouse?.name || "").toLowerCase();
+        if (type === 'mfg') return name.includes('myfullguy') || name.includes('magnolia');
+        if (type === 'fba') return name.includes('fba');
+        return false;
+      })
+      .reduce((sum, e) => sum + (e.available_stock_level ?? e.physical_stock_level ?? 0), 0);
   }
 
-  function getProductSKU(product) {
-    if (product.sellables && product.sellables.length > 0) {
-      return product.sellables[0].sku_code || "–";
+  function getProductStocks(product) {
+    if (!product.sellables || product.sellables.length === 0) {
+      return { mfg: 0, fba: 0, total: product.total_stock_level || 0, sku: "–" };
     }
-    return "–";
+    let mfg = 0, fba = 0, total = 0;
+    const sku = product.sellables[0].sku_code || "–";
+    for (const s of product.sellables) {
+      mfg   += getWarehouseStock(s, 'mfg');
+      fba   += getWarehouseStock(s, 'fba');
+      total += s.stock_level_at_all_warehouses || 0;
+    }
+    return { mfg, fba, total, sku };
+  }
+
+  function stockCell(n, type) {
+    if (n === 0) return `<span class="stock-zero">—</span>`;
+    const max = 50;
+    const pct = Math.min(100, (n / max) * 100);
+    const colors = { mfg: "#2563eb", fba: "#7c3aed", total: "#16a34a" };
+    const color = colors[type] || "#16a34a";
+    return `<div class="stock-cell">
+      <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${color}"></div></div>
+      <span class="stock-num" style="color:${color}">${n}</span>
+    </div>`;
   }
 
   // ── INVENTORY ──────────────────────────────────────
   async function loadInventory() {
-    setLoading("inv-body", 5);
+    setLoading("inv-body", 6);
     try {
-      const data = await veeqoFetch("/products", { params: `page_size=100&page=1` });
-      state.inventory.all = data;
-      buildBrandFilter(data);
+      const data = await veeqoFetch("/products");
+      const filtered = data.filter(clientFilter);
+      state.inventory.all = filtered;
+      buildBrandFilter(filtered);
       filterInventory();
-      renderInvStats(data);
+      renderInvStats(filtered);
     } catch(e) { showError("No se pudo cargar el inventario: " + e.message); }
   }
 
   function buildBrandFilter(products) {
-    const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
-    const sel = document.getElementById("brand-filter");
-    sel.innerHTML = `<option value="">Todas las marcas</option>` +
-      brands.map(b => `<option value="${b}">${b}</option>`).join("");
+    if (!currentClient || currentClient.admin) {
+      const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
+      const sel = document.getElementById("brand-filter");
+      sel.innerHTML = `<option value="">Todas las marcas</option>` +
+        brands.map(b => `<option value="${b}">${b}</option>`).join("");
+      sel.parentElement.style.display = "";
+    } else {
+      document.getElementById("brand-filter").parentElement.style.display = "none";
+    }
   }
 
   function filterInventory() {
     const search = document.getElementById("inv-search").value.toLowerCase();
     const brand  = document.getElementById("brand-filter").value;
     state.inventory.filtered = state.inventory.all.filter(p => {
-      const sku = getProductSKU(p).toLowerCase();
+      const { sku } = getProductStocks(p);
       const matchSearch = !search ||
         p.title?.toLowerCase().includes(search) ||
-        sku.includes(search);
+        sku.toLowerCase().includes(search);
       return matchSearch && (!brand || p.brand?.name === brand);
     });
     state.inventory.page = 1;
     renderInventory();
   }
 
-  // ── INVENTORY SORT ─────────────────────────────────
   function sortInv(key) {
     const s = state.inventory;
-    s.sortDir = (s.sortKey === key) ? -s.sortDir : -1; // default desc
+    s.sortDir = s.sortKey === key ? -s.sortDir : -1;
     s.sortKey = key;
-    updateSortIcons('inv', key, s.sortDir, ['title','sku','brand','stock','status']);
-
+    updateSortIcons('', key, s.sortDir, ['title','sku','brand','mfg','fba','total']);
     s.filtered.sort((a, b) => {
-      let av, bv;
-      if (key === 'title')  { av = a.title || ''; bv = b.title || ''; }
-      if (key === 'sku')    { av = getProductSKU(a); bv = getProductSKU(b); }
-      if (key === 'brand')  { av = a.brand?.name || ''; bv = b.brand?.name || ''; }
-      if (key === 'stock')  { av = getProductStock(a); bv = getProductStock(b); return (av - bv) * s.sortDir; }
-      if (key === 'status') { av = getProductStock(a) === 0 ? 0 : getProductStock(a) < 10 ? 1 : 2;
-                              bv = getProductStock(b) === 0 ? 0 : getProductStock(b) < 10 ? 1 : 2;
-                              return (av - bv) * s.sortDir; }
-      return av.localeCompare(bv) * s.sortDir;
+      const as = getProductStocks(a), bs = getProductStocks(b);
+      if (key === 'title') return (a.title||'').localeCompare(b.title||'') * s.sortDir;
+      if (key === 'sku')   return as.sku.localeCompare(bs.sku) * s.sortDir;
+      if (key === 'brand') return (a.brand?.name||'').localeCompare(b.brand?.name||'') * s.sortDir;
+      if (key === 'mfg')   return (as.mfg - bs.mfg) * s.sortDir;
+      if (key === 'fba')   return (as.fba - bs.fba) * s.sortDir;
+      if (key === 'total') return (as.total - bs.total) * s.sortDir;
+      return 0;
     });
     s.page = 1;
     renderInventory();
@@ -451,56 +426,37 @@
 
   function renderInventory() {
     const { filtered, page } = state.inventory;
-    const paged = paginate(filtered, page);
     const body = document.getElementById("inv-body");
-
     if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="5"><div class="empty-state">Sin resultados</div></td></tr>`;
+      body.innerHTML = `<tr><td colspan="6"><div class="empty-state">Sin resultados</div></td></tr>`;
       document.getElementById("inv-pagination").innerHTML = "";
       return;
     }
-
-    body.innerHTML = paged.map((p, i) => {
-      const stock = getProductStock(p);
-      const sku   = getProductSKU(p);
-      const pct   = Math.min(100, (stock / 50) * 100);
-      const fillColor = stock === 0 ? "#dc2626" : stock < 10 ? "#d97706" : "#16a34a";
-      const badge = stock === 0
-        ? `<span class="badge badge-danger">Sin stock</span>`
-        : stock < 10
-          ? `<span class="badge badge-warning">Stock bajo</span>`
-          : `<span class="badge badge-success">En stock</span>`;
-
+    body.innerHTML = paginate(filtered, page).map(p => {
+      const { mfg, fba, total, sku } = getProductStocks(p);
       return `<tr>
-        <td style="max-width:340px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(p.title||'').replace(/"/g,"'")}">
-          ${p.title || "–"}
-        </td>
+        <td style="max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(p.title||'').replace(/"/g,"'")}">${p.title||"–"}</td>
         <td class="td-mono">${sku}</td>
-        <td class="td-muted">${p.brand?.name || "–"}</td>
-        <td>
-          <div class="stock-cell">
-            <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${fillColor}"></div></div>
-            <span class="stock-num" style="color:${fillColor}">${stock}</span>
-          </div>
-        </td>
-        <td>${badge}</td>
+        <td class="td-muted">${p.brand?.name||"–"}</td>
+        <td>${stockCell(mfg,'mfg')}</td>
+        <td>${stockCell(fba,'fba')}</td>
+        <td>${stockCell(total,'total')}</td>
       </tr>`;
     }).join("");
-
-    renderPagination("inv-pagination", filtered.length, page, (p) => {
-      state.inventory.page = p; renderInventory();
-    });
+    renderPagination("inv-pagination", filtered.length, page, p => { state.inventory.page = p; renderInventory(); });
   }
 
   function renderInvStats(products) {
-    const totalStock = products.reduce((s, p) => s + getProductStock(p), 0);
-    const outOfStock = products.filter(p => getProductStock(p) === 0).length;
-    const lowStock   = products.filter(p => { const s = getProductStock(p); return s > 0 && s < 10; }).length;
-
+    let totalMfg = 0, totalFba = 0, outOfStock = 0;
+    for (const p of products) {
+      const { mfg, fba, total } = getProductStocks(p);
+      totalMfg += mfg; totalFba += fba;
+      if (total === 0) outOfStock++;
+    }
     document.getElementById("inv-stats").innerHTML = `
       <div class="stat-card"><div class="stat-label">Productos</div><div class="stat-value c-blue">${products.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Unidades totales</div><div class="stat-value">${totalStock}</div></div>
-      <div class="stat-card"><div class="stat-label">Stock bajo</div><div class="stat-value c-orange">${lowStock}</div></div>
+      <div class="stat-card"><div class="stat-label">Stock MyFullGuy</div><div class="stat-value c-blue">${totalMfg}</div></div>
+      <div class="stat-card"><div class="stat-label">Stock Amazon FBA</div><div class="stat-value c-purple">${totalFba}</div></div>
       <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value c-red">${outOfStock}</div></div>
     `;
   }
@@ -508,102 +464,71 @@
   // ── ORDERS ─────────────────────────────────────────
   function getOrderCustomer(o) {
     return o.deliver_to?.first_name
-      ? `${o.deliver_to.first_name} ${o.deliver_to.last_name || ""}`.trim()
+      ? `${o.deliver_to.first_name} ${o.deliver_to.last_name||""}`.trim()
       : o.customer?.email || "–";
   }
 
   function orderRow(o) {
-    const num      = o.number || o.id || "–";
-    const customer = getOrderCustomer(o);
-    const items    = o.line_items?.length ?? "–";
-    const total    = o.total_price != null ? `$${parseFloat(o.total_price).toFixed(2)}` : "–";
-    const channel  = o.channel?.name || "–";
-    const badge    = statusBadge(o.status || "");
-    const date     = o.created_at ? new Date(o.created_at).toLocaleDateString("es-AR") : "–";
-
+    const total = o.total_price != null ? `$${parseFloat(o.total_price).toFixed(2)}` : "–";
+    const date  = o.created_at ? new Date(o.created_at).toLocaleDateString("es-AR") : "–";
     return `<tr>
-      <td style="font-weight:600;color:var(--blue)">#${num}</td>
-      <td>${customer}</td>
-      <td class="td-muted">${items}</td>
+      <td style="font-weight:600;color:var(--blue)">#${o.number||o.id||"–"}</td>
+      <td>${getOrderCustomer(o)}</td>
+      <td class="td-muted">${o.line_items?.length??0}</td>
       <td style="font-weight:500">${total}</td>
-      <td class="td-muted">${channel}</td>
-      <td>${badge}</td>
+      <td class="td-muted">${o.channel?.name||"–"}</td>
+      <td>${statusBadge(o.status||"")}</td>
       <td class="td-muted">${date}</td>
     </tr>`;
   }
 
   function statusBadge(s) {
     const map = {
-      awaiting_fulfillment: ["badge-warning","Esperando"],
-      allocated:   ["badge-blue",   "Alocado"],
-      printed:     ["badge-blue",   "Impreso"],
-      picked:      ["badge-blue",   "Picked"],
-      ready_to_ship:["badge-success","Listo"],
-      shipped:     ["badge-success","Enviado"],
-      delivered:   ["badge-success","Entregado"],
-      cancelled:   ["badge-danger", "Cancelado"],
-      refunded:    ["badge-muted",  "Reembolsado"],
+      awaiting_fulfillment:["badge-warning","Esperando"],
+      allocated:["badge-blue","Alocado"], printed:["badge-blue","Impreso"],
+      picked:["badge-blue","Picked"], ready_to_ship:["badge-success","Listo"],
+      shipped:["badge-success","Enviado"], delivered:["badge-success","Entregado"],
+      cancelled:["badge-danger","Cancelado"], refunded:["badge-muted","Reembolsado"],
     };
-    const [cls, label] = map[s] || ["badge-muted", s || "–"];
+    const [cls,label] = map[s]||["badge-muted",s||"–"];
     return `<span class="badge ${cls}">${label}</span>`;
   }
 
   function orderStats(orders, id) {
-    const revenue = orders.reduce((s, o) => s + parseFloat(o.total_price || 0), 0);
-    const items   = orders.reduce((s, o) => s + (o.line_items?.length || 0), 0);
+    const revenue = orders.reduce((s,o) => s + parseFloat(o.total_price||0), 0);
     document.getElementById(id).innerHTML = `
       <div class="stat-card"><div class="stat-label">Órdenes</div><div class="stat-value c-blue">${orders.length}</div></div>
       <div class="stat-card"><div class="stat-label">Revenue total</div><div class="stat-value c-green">$${revenue.toFixed(0)}</div></div>
-      <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${items}</div></div>
+      <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${orders.reduce((s,o)=>s+(o.line_items?.length||0),0)}</div></div>
     `;
   }
 
-  // ── ORDER SORT ─────────────────────────────────────
   function sortOrders(tab, key) {
-    const s = state[tab === 'ao' ? 'activeOrders' : 'history'];
-    s.sortDir = (s.sortKey === key) ? -s.sortDir : -1;
+    const s = state[tab==='ao'?'activeOrders':'history'];
+    s.sortDir = s.sortKey===key ? -s.sortDir : -1;
     s.sortKey = key;
-    const icons = ['number','customer','items','total','channel','status','date'];
-    updateSortIcons(tab, key, s.sortDir, icons);
-
-    s.filtered.sort((a, b) => {
-      let av, bv;
-      if (key === 'number')   { return (parseFloat(a.number||0) - parseFloat(b.number||0)) * s.sortDir; }
-      if (key === 'customer') { av = getOrderCustomer(a); bv = getOrderCustomer(b); }
-      if (key === 'items')    { return ((a.line_items?.length||0) - (b.line_items?.length||0)) * s.sortDir; }
-      if (key === 'total')    { return (parseFloat(a.total_price||0) - parseFloat(b.total_price||0)) * s.sortDir; }
-      if (key === 'channel')  { av = a.channel?.name||''; bv = b.channel?.name||''; }
-      if (key === 'status')   { av = a.status||''; bv = b.status||''; }
-      if (key === 'date')     { return (new Date(a.created_at||0) - new Date(b.created_at||0)) * s.sortDir; }
-      return (av||'').localeCompare(bv||'') * s.sortDir;
+    updateSortIcons(tab+'-', key, s.sortDir, ['number','customer','items','total','channel','status','date']);
+    s.filtered.sort((a,b) => {
+      if (key==='number')   return (parseFloat(a.number||0)-parseFloat(b.number||0))*s.sortDir;
+      if (key==='customer') return getOrderCustomer(a).localeCompare(getOrderCustomer(b))*s.sortDir;
+      if (key==='items')    return ((a.line_items?.length||0)-(b.line_items?.length||0))*s.sortDir;
+      if (key==='total')    return (parseFloat(a.total_price||0)-parseFloat(b.total_price||0))*s.sortDir;
+      if (key==='channel')  return (a.channel?.name||'').localeCompare(b.channel?.name||'')*s.sortDir;
+      if (key==='status')   return (a.status||'').localeCompare(b.status||'')*s.sortDir;
+      if (key==='date')     return (new Date(a.created_at||0)-new Date(b.created_at||0))*s.sortDir;
+      return 0;
     });
     s.page = 1;
-    tab === 'ao' ? renderActiveOrders() : renderHistory();
+    tab==='ao' ? renderActiveOrders() : renderHistory();
   }
 
-  // ── SORT ICONS ─────────────────────────────────────
-  function updateSortIcons(prefix, activeKey, dir, keys) {
-    keys.forEach(k => {
-      const el = document.getElementById(`${prefix}-si-${k}`) || document.getElementById(`si-${k}`);
-      if (!el) return;
-      const th = el.parentElement;
-      th.classList.remove('sort-asc','sort-desc');
-      el.textContent = '↕';
-      if (k === activeKey) {
-        th.classList.add(dir === 1 ? 'sort-asc' : 'sort-desc');
-        el.textContent = dir === 1 ? '↑' : '↓';
-      }
-    });
-  }
-
-  // ── ACTIVE ORDERS ──────────────────────────────────
   async function loadActiveOrders() {
     setLoading("ao-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: `status=awaiting_fulfillment,allocated,printed,picked,ready_to_ship&page_size=100&page=1` });
+      const data = await veeqoFetch("/orders", { params: "status=awaiting_fulfillment,allocated,printed,picked,ready_to_ship" });
       state.activeOrders.all = data;
       state.activeOrders.filtered = [...data];
-      filterActiveOrders();
+      renderActiveOrders();
       orderStats(data, "ao-stats");
     } catch(e) { showError("No se pudo cargar órdenes activas: " + e.message); }
   }
@@ -612,36 +537,27 @@
     const search = document.getElementById("ao-search").value.toLowerCase();
     const status = document.getElementById("ao-status-filter").value;
     state.activeOrders.filtered = state.activeOrders.all.filter(o => {
-      const match = !search || String(o.number).includes(search) ||
-        getOrderCustomer(o).toLowerCase().includes(search);
-      return match && (!status || o.status === status);
+      const match = !search || String(o.number).includes(search) || getOrderCustomer(o).toLowerCase().includes(search);
+      return match && (!status || o.status===status);
     });
-    state.activeOrders.page = 1;
-    renderActiveOrders();
+    state.activeOrders.page = 1; renderActiveOrders();
   }
 
   function renderActiveOrders() {
     const { filtered, page } = state.activeOrders;
     const body = document.getElementById("ao-body");
-    if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin órdenes activas</div></td></tr>`;
-      document.getElementById("ao-pagination").innerHTML = "";
-      return;
-    }
-    body.innerHTML = paginate(filtered, page).map(orderRow).join("");
-    renderPagination("ao-pagination", filtered.length, page, (p) => {
-      state.activeOrders.page = p; renderActiveOrders();
-    });
+    if (!filtered.length) { body.innerHTML=`<tr><td colspan="7"><div class="empty-state">Sin órdenes activas</div></td></tr>`; document.getElementById("ao-pagination").innerHTML=""; return; }
+    body.innerHTML = paginate(filtered,page).map(orderRow).join("");
+    renderPagination("ao-pagination", filtered.length, page, p=>{ state.activeOrders.page=p; renderActiveOrders(); });
   }
 
-  // ── HISTORY ────────────────────────────────────────
   async function loadHistory() {
     setLoading("hist-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: `status=shipped,delivered,cancelled,refunded&page_size=100&page=1` });
+      const data = await veeqoFetch("/orders", { params: "status=shipped,delivered,cancelled,refunded" });
       state.history.all = data;
       state.history.filtered = [...data];
-      filterHistory();
+      renderHistory();
       orderStats(data, "hist-stats");
     } catch(e) { showError("No se pudo cargar el historial: " + e.message); }
   }
@@ -650,49 +566,46 @@
     const search = document.getElementById("hist-search").value.toLowerCase();
     const status = document.getElementById("hist-status-filter").value;
     state.history.filtered = state.history.all.filter(o => {
-      const match = !search || String(o.number).includes(search) ||
-        getOrderCustomer(o).toLowerCase().includes(search);
-      return match && (!status || o.status === status);
+      const match = !search || String(o.number).includes(search) || getOrderCustomer(o).toLowerCase().includes(search);
+      return match && (!status || o.status===status);
     });
-    state.history.page = 1;
-    renderHistory();
+    state.history.page = 1; renderHistory();
   }
 
   function renderHistory() {
     const { filtered, page } = state.history;
     const body = document.getElementById("hist-body");
-    if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin historial</div></td></tr>`;
-      document.getElementById("hist-pagination").innerHTML = "";
-      return;
-    }
-    body.innerHTML = paginate(filtered, page).map(orderRow).join("");
-    renderPagination("hist-pagination", filtered.length, page, (p) => {
-      state.history.page = p; renderHistory();
-    });
+    if (!filtered.length) { body.innerHTML=`<tr><td colspan="7"><div class="empty-state">Sin historial</div></td></tr>`; document.getElementById("hist-pagination").innerHTML=""; return; }
+    body.innerHTML = paginate(filtered,page).map(orderRow).join("");
+    renderPagination("hist-pagination", filtered.length, page, p=>{ state.history.page=p; renderHistory(); });
   }
 
   // ── HELPERS ────────────────────────────────────────
-  function paginate(arr, page) {
-    return arr.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  }
+  function paginate(arr, page) { return arr.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE); }
 
   function renderPagination(id, total, page, onPage) {
-    const pages = Math.ceil(total / PAGE_SIZE);
-    if (pages <= 1) { document.getElementById(id).innerHTML = ""; return; }
+    const pages = Math.ceil(total/PAGE_SIZE);
+    if (pages<=1) { document.getElementById(id).innerHTML=""; return; }
     document.getElementById(id).innerHTML = `
       <span>${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,total)} de ${total}</span>
       <button class="page-btn" onclick="(${onPage})(${page-1})" ${page===1?"disabled":""}>← Anterior</button>
-      <button class="page-btn" onclick="(${onPage})(${page+1})" ${page===pages?"disabled":""}>Siguiente →</button>
-    `;
+      <button class="page-btn" onclick="(${onPage})(${page+1})" ${page===pages?"disabled":""}>Siguiente →</button>`;
   }
 
   function setLoading(id, cols) {
-    document.getElementById(id).innerHTML =
-      `<tr><td colspan="${cols}"><div class="loading-state"><div class="spinner"></div>Cargando...</div></td></tr>`;
+    document.getElementById(id).innerHTML=`<tr><td colspan="${cols}"><div class="loading-state"><div class="spinner"></div>Cargando...</div></td></tr>`;
   }
 
-  loadInventory();
+  function updateSortIcons(prefix, activeKey, dir, keys) {
+    keys.forEach(k => {
+      const el = document.getElementById(`${prefix}si-${k}`);
+      if (!el) return;
+      const th = el.parentElement;
+      th.classList.remove('sort-asc','sort-desc');
+      el.textContent = '↕';
+      if (k===activeKey) { th.classList.add(dir===1?'sort-asc':'sort-desc'); el.textContent=dir===1?'↑':'↓'; }
+    });
+  }
 </script>
 </body>
 </html>
