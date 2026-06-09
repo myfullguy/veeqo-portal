@@ -3,89 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal de Clientes</title>
+  <title>MyFullGuy — Portal de Clientes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d0f;
-      --surface: #16161a;
-      --surface2: #1e1e24;
-      --border: #2a2a34;
-      --accent: #e8ff47;
-      --accent2: #47c8ff;
-      --text: #f0f0f0;
-      --muted: #6b6b80;
-      --danger: #ff4747;
-      --success: #47ffb2;
-      --warning: #ffb347;
-      --font-display: 'Syne', sans-serif;
-      --font-mono: 'DM Mono', monospace;
+      --bg: #f7f7f5;
+      --white: #ffffff;
+      --border: #e5e5e0;
+      --border2: #d0d0c8;
+      --accent: #1a1a1a;
+      --blue: #2563eb;
+      --blue-light: #eff6ff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --muted2: #9ca3af;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --font: 'Inter', sans-serif;
+      --font-display: 'Playfair Display', serif;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-mono);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
       min-height: 100vh;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* HEADER */
     header {
+      background: var(--white);
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
+      height: 60px;
       position: sticky;
       top: 0;
-      background: var(--bg);
       z-index: 100;
+      box-shadow: var(--shadow);
     }
 
     .logo {
       font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
-    .logo-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
+    .logo span { color: var(--blue); }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--success);
       border-radius: 50%;
       animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
 
-    .status-badge {
-      font-size: 0.7rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .status-badge span {
-      color: var(--success);
-    }
-
-    /* TABS */
+    /* NAV TABS */
     nav {
-      padding: 0 2rem;
+      background: var(--white);
       border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
       display: flex;
       gap: 0;
     }
@@ -93,91 +102,32 @@
     .tab-btn {
       background: none;
       border: none;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
       border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 14px 20px;
+      cursor: pointer;
       transition: all 0.15s;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      margin-bottom: -1px;
     }
 
     .tab-btn:hover { color: var(--text); }
 
     .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
+      color: var(--blue);
+      border-bottom-color: var(--blue);
     }
 
     /* MAIN */
     main {
       padding: 2rem;
-      max-width: 1400px;
+      max-width: 1300px;
       margin: 0 auto;
     }
 
-    /* TOOLBAR */
-    .toolbar {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .search-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      padding: 0.6rem 1rem;
-      border-radius: 4px;
-      outline: none;
-      transition: border-color 0.15s;
-      min-width: 240px;
-    }
-
-    .search-box:focus { border-color: var(--accent); }
-    .search-box::placeholder { color: var(--muted); }
-
-    select.filter-select {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      padding: 0.6rem 1rem;
-      border-radius: 4px;
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.15s;
-    }
-
-    select.filter-select:focus { border-color: var(--accent); }
-
-    .btn-refresh {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.6rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.15s;
-      letter-spacing: 0.05em;
-      margin-left: auto;
-    }
-
-    .btn-refresh:hover {
-      color: var(--text);
-      border-color: var(--accent);
-    }
-
-    /* STATS ROW */
+    /* STATS */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -186,34 +136,110 @@
     }
 
     .stat-card {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
-      padding: 1.2rem;
-      border-radius: 6px;
-      animation: fadeIn 0.3s ease forwards;
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.3s ease forwards;
     }
 
     .stat-label {
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.06em;
+      color: var(--muted2);
+      margin-bottom: 6px;
     }
 
     .stat-value {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 700;
+      font-size: 2rem;
+      font-weight: 600;
       line-height: 1;
+      color: var(--text);
+    }
+
+    .stat-value.blue { color: var(--blue); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.red { color: var(--danger); }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 8px 12px 8px 36px;
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      min-width: 220px;
+      box-shadow: var(--shadow);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 11px center;
+    }
+
+    .search-box:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .search-box::placeholder { color: var(--muted2); }
+
+    select.filter-select {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      box-shadow: var(--shadow);
+    }
+
+    select.filter-select:focus { border-color: var(--blue); }
+
+    .btn-refresh {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: var(--shadow);
+      margin-left: auto;
+    }
+
+    .btn-refresh:hover {
+      color: var(--text);
+      border-color: var(--border2);
     }
 
     /* TABLE */
     .table-wrap {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--radius);
       overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
     table {
@@ -222,168 +248,157 @@
     }
 
     thead tr {
-      background: var(--surface2);
+      background: #fafafa;
       border-bottom: 1px solid var(--border);
     }
 
     th {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--muted);
-      padding: 0.75rem 1rem;
+      color: var(--muted2);
+      padding: 11px 16px;
       text-align: left;
-      font-weight: 500;
     }
 
     td {
-      padding: 0.85rem 1rem;
-      font-size: 0.78rem;
+      padding: 13px 16px;
+      font-size: 13px;
       border-bottom: 1px solid var(--border);
+      color: var(--text);
       vertical-align: middle;
     }
 
     tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
 
-    tr:hover td { background: var(--surface2); }
+    .td-muted { color: var(--muted); font-size: 12px; }
+    .td-mono { font-family: 'Courier New', monospace; font-size: 12px; }
 
     /* BADGES */
     .badge {
-      display: inline-block;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      font-size: 0.65rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .badge-success { background: rgba(71,255,178,0.12); color: var(--success); }
-    .badge-warning { background: rgba(255,179,71,0.12); color: var(--warning); }
-    .badge-danger  { background: rgba(255,71,71,0.12);  color: var(--danger);  }
-    .badge-info    { background: rgba(71,200,255,0.12); color: var(--accent2); }
-    .badge-muted   { background: rgba(107,107,128,0.15); color: var(--muted); }
-
-    /* STOCK INDICATOR */
-    .stock-bar-wrap {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
-    .stock-bar {
-      height: 4px;
-      width: 60px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-    }
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); }
+    .badge-danger  { background: var(--danger-light);  color: var(--danger);  }
+    .badge-blue    { background: var(--blue-light);    color: var(--blue);    }
+    .badge-muted   { background: #f3f4f6; color: var(--muted); }
 
-    .stock-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
+    /* STOCK BAR */
+    .stock-cell { display: flex; align-items: center; gap: 10px; }
+    .stock-num { font-weight: 600; min-width: 28px; }
+    .stock-bar { height: 5px; width: 64px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+    .stock-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
 
-    /* LOADING */
-    .loading-state {
+    /* LOADING / EMPTY */
+    .loading-state, .empty-state {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 5rem 2rem;
-      gap: 1rem;
+      padding: 4rem 2rem;
+      gap: 12px;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 13px;
     }
 
     .spinner {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border: 2px solid var(--border);
-      border-top-color: var(--accent);
+      border-top-color: var(--blue);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.7s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
 
     /* SECTIONS */
     .section { display: none; }
     .section.active { display: block; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(5px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .row-anim { animation: fadeIn 0.25s ease forwards; }
+    .row-anim { animation: fadeUp 0.2s ease forwards; }
 
     /* PAGINATION */
     .pagination {
       display: flex;
-      gap: 0.5rem;
+      gap: 6px;
       align-items: center;
       justify-content: flex-end;
-      padding: 1rem 0 0;
-      font-size: 0.75rem;
+      padding: 14px 0 0;
+      font-size: 12px;
       color: var(--muted);
     }
 
     .page-btn {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
       color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .page-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
     /* ERROR */
     .error-banner {
-      background: rgba(255,71,71,0.08);
-      border: 1px solid rgba(255,71,71,0.3);
+      background: var(--danger-light);
+      border: 1px solid #fecaca;
       color: var(--danger);
-      border-radius: 4px;
-      padding: 0.8rem 1rem;
-      font-size: 0.78rem;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-size: 13px;
       margin-bottom: 1rem;
+    }
+
+    /* WAREHOUSE TAG */
+    .wh-tag {
+      font-size: 11px;
+      color: var(--muted2);
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <div class="logo-dot"></div>
-    Portal de Clientes
-  </div>
-  <div class="status-badge">LIVE <span>●</span></div>
+  <div class="logo">MyFullGuy <span>·</span> Portal</div>
+  <div class="live-badge"><div class="live-dot"></div> En vivo</div>
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="switchTab('inventory')">Inventario</button>
-  <button class="tab-btn" onclick="switchTab('active-orders')">Órdenes Activas</button>
-  <button class="tab-btn" onclick="switchTab('history')">Historial</button>
+  <button class="tab-btn active" onclick="switchTab('inventory', this)">Inventario</button>
+  <button class="tab-btn" onclick="switchTab('active-orders', this)">Órdenes Activas</button>
+  <button class="tab-btn" onclick="switchTab('history', this)">Historial</button>
 </nav>
 
 <main>
   <div id="error-container"></div>
 
-  <!-- =================== INVENTARIO =================== -->
+  <!-- INVENTARIO -->
   <section id="inventory" class="section active">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar producto o SKU..." oninput="filterInventory()" id="inv-search" />
@@ -392,9 +407,7 @@
       </select>
       <button class="btn-refresh" onclick="loadInventory()">↺ Actualizar</button>
     </div>
-
     <div class="stats-row" id="inv-stats"></div>
-
     <div class="table-wrap">
       <table>
         <thead>
@@ -402,7 +415,7 @@
             <th>Producto</th>
             <th>SKU</th>
             <th>Marca</th>
-            <th>Stock disponible</th>
+            <th>Stock (MyFullGuy)</th>
             <th>Estado</th>
             <th>Precio</th>
           </tr>
@@ -415,7 +428,7 @@
     <div class="pagination" id="inv-pagination"></div>
   </section>
 
-  <!-- =================== ÓRDENES ACTIVAS =================== -->
+  <!-- ÓRDENES ACTIVAS -->
   <section id="active-orders" class="section">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterActiveOrders()" id="ao-search" />
@@ -429,9 +442,7 @@
       </select>
       <button class="btn-refresh" onclick="loadActiveOrders()">↺ Actualizar</button>
     </div>
-
     <div class="stats-row" id="ao-stats"></div>
-
     <div class="table-wrap">
       <table>
         <thead>
@@ -453,7 +464,7 @@
     <div class="pagination" id="ao-pagination"></div>
   </section>
 
-  <!-- =================== HISTORIAL =================== -->
+  <!-- HISTORIAL -->
   <section id="history" class="section">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterHistory()" id="hist-search" />
@@ -466,9 +477,7 @@
       </select>
       <button class="btn-refresh" onclick="loadHistory()">↺ Actualizar</button>
     </div>
-
     <div class="stats-row" id="hist-stats"></div>
-
     <div class="table-wrap">
       <table>
         <thead>
@@ -492,18 +501,17 @@
 </main>
 
 <script>
-  // =================== CONFIG ===================
   const API = "/.netlify/functions/veeqo";
   const PAGE_SIZE = 50;
+  const MYFULLGUY_WAREHOUSE_ID = 435401; // MyFullGuy - Magnolia
 
-  // =================== STATE ===================
   let state = {
-    inventory: { all: [], filtered: [], page: 1, brands: [] },
+    inventory:    { all: [], filtered: [], page: 1 },
     activeOrders: { all: [], filtered: [], page: 1 },
     history:      { all: [], filtered: [], page: 1 },
   };
 
-  // =================== FETCH ===================
+  // ── FETCH ──────────────────────────────────────────
   async function veeqoFetch(endpoint, params = {}) {
     const qs = new URLSearchParams({ endpoint, ...params }).toString();
     const res = await fetch(`${API}?${qs}`);
@@ -517,18 +525,24 @@
     setTimeout(() => document.getElementById("error-container").innerHTML = "", 6000);
   }
 
-  // =================== TABS ===================
-  function switchTab(tab) {
+  // ── TABS ───────────────────────────────────────────
+  function switchTab(tab, btn) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(tab).classList.add("active");
-    event.target.classList.add("active");
-
+    btn.classList.add("active");
     if (tab === "active-orders" && state.activeOrders.all.length === 0) loadActiveOrders();
     if (tab === "history" && state.history.all.length === 0) loadHistory();
   }
 
-  // =================== INVENTORY ===================
+  // ── STOCK HELPER ───────────────────────────────────
+  function getMyFullGuyStock(variant) {
+    if (!variant.stock_entries) return 0;
+    const entry = variant.stock_entries.find(e => e.warehouse_id === MYFULLGUY_WAREHOUSE_ID);
+    return entry ? (entry.available_stock_level ?? entry.physical_stock_level ?? 0) : 0;
+  }
+
+  // ── INVENTORY ──────────────────────────────────────
   async function loadInventory() {
     setLoading("inv-body", 6);
     try {
@@ -542,7 +556,6 @@
 
   function buildBrandFilter(products) {
     const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
-    state.inventory.brands = brands;
     const sel = document.getElementById("brand-filter");
     sel.innerHTML = `<option value="">Todas las marcas</option>` +
       brands.map(b => `<option value="${b}">${b}</option>`).join("");
@@ -575,30 +588,29 @@
 
     body.innerHTML = paged.map((p, i) => {
       const variant = p.variants?.[0] || {};
-      const stock = variant.stock_entries?.reduce((sum, s) => sum + (s.quantity || 0), 0) ?? "–";
+      const stock = getMyFullGuyStock(variant);
       const price = variant.price != null ? `$${parseFloat(variant.price).toFixed(2)}` : "–";
       const sku = variant.sku || "–";
-      const stockNum = typeof stock === "number" ? stock : 0;
-      const pct = Math.min(100, Math.max(0, (stockNum / 100) * 100));
-      const color = stockNum === 0 ? "var(--danger)" : stockNum < 10 ? "var(--warning)" : "var(--success)";
-      const badge = stockNum === 0
+      const pct = Math.min(100, (stock / 50) * 100);
+      const fillColor = stock === 0 ? "#dc2626" : stock < 10 ? "#d97706" : "#16a34a";
+      const badge = stock === 0
         ? `<span class="badge badge-danger">Sin stock</span>`
-        : stockNum < 10
+        : stock < 10
           ? `<span class="badge badge-warning">Stock bajo</span>`
           : `<span class="badge badge-success">En stock</span>`;
 
-      return `<tr class="row-anim" style="animation-delay:${i * 0.02}s">
-        <td>${p.title || "–"}</td>
-        <td style="color:var(--muted)">${sku}</td>
-        <td>${p.brand?.name || "–"}</td>
+      return `<tr class="row-anim" style="animation-delay:${i * 0.015}s">
+        <td style="max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.title || ''}">${p.title || "–"}</td>
+        <td class="td-mono td-muted">${sku}</td>
+        <td class="td-muted">${p.brand?.name || "–"}</td>
         <td>
-          <div class="stock-bar-wrap">
-            <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${color}"></div></div>
-            ${stockNum}
+          <div class="stock-cell">
+            <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+            <span class="stock-num" style="color:${fillColor}">${stock}</span>
           </div>
         </td>
         <td>${badge}</td>
-        <td style="color:var(--accent)">${price}</td>
+        <td style="font-weight:500">${price}</td>
       </tr>`;
     }).join("");
 
@@ -608,22 +620,22 @@
   }
 
   function renderInvStats(products) {
-    const totalVariants = products.reduce((s, p) => s + (p.variants?.length || 0), 0);
     const totalStock = products.reduce((s, p) =>
-      s + (p.variants?.reduce((vs, v) =>
-        vs + (v.stock_entries?.reduce((ss, se) => ss + (se.quantity || 0), 0) || 0), 0) || 0), 0);
+      s + (p.variants?.reduce((vs, v) => vs + getMyFullGuyStock(v), 0) || 0), 0);
     const outOfStock = products.filter(p =>
-      p.variants?.every(v => v.stock_entries?.reduce((s, se) => s + (se.quantity || 0), 0) === 0)).length;
+      p.variants?.every(v => getMyFullGuyStock(v) === 0)).length;
+    const lowStock = products.filter(p =>
+      p.variants?.some(v => { const s = getMyFullGuyStock(v); return s > 0 && s < 10; })).length;
 
     document.getElementById("inv-stats").innerHTML = `
-      <div class="stat-card"><div class="stat-label">Productos</div><div class="stat-value" style="color:var(--accent)">${products.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Variantes</div><div class="stat-value" style="color:var(--accent2)">${totalVariants}</div></div>
-      <div class="stat-card"><div class="stat-label">Unidades totales</div><div class="stat-value">${totalStock}</div></div>
-      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value" style="color:var(--danger)">${outOfStock}</div></div>
+      <div class="stat-card"><div class="stat-label">Productos</div><div class="stat-value blue">${products.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Unidades en MyFullGuy</div><div class="stat-value">${totalStock}</div></div>
+      <div class="stat-card"><div class="stat-label">Stock bajo</div><div class="stat-value" style="color:var(--warning)">${lowStock}</div></div>
+      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value red">${outOfStock}</div></div>
     `;
   }
 
-  // =================== ORDERS SHARED ===================
+  // ── ORDERS SHARED ──────────────────────────────────
   function orderRow(o, i) {
     const num = o.number || o.id || "–";
     const customer = o.deliver_to?.first_name
@@ -632,55 +644,51 @@
     const items = o.line_items?.length ?? "–";
     const total = o.total_price != null ? `$${parseFloat(o.total_price).toFixed(2)}` : "–";
     const channel = o.channel?.name || "–";
-    const statusRaw = o.status || "–";
-    const badge = statusBadge(statusRaw);
+    const badge = statusBadge(o.status || "");
     const date = o.created_at ? new Date(o.created_at).toLocaleDateString("es-AR") : "–";
 
-    return `<tr class="row-anim" style="animation-delay:${i * 0.02}s">
-      <td style="color:var(--accent2);font-weight:500">#${num}</td>
+    return `<tr class="row-anim" style="animation-delay:${i * 0.015}s">
+      <td style="font-weight:600;color:var(--blue)">#${num}</td>
       <td>${customer}</td>
-      <td>${items}</td>
-      <td style="color:var(--accent)">${total}</td>
-      <td style="color:var(--muted)">${channel}</td>
+      <td class="td-muted">${items}</td>
+      <td style="font-weight:500">${total}</td>
+      <td class="td-muted">${channel}</td>
       <td>${badge}</td>
-      <td style="color:var(--muted)">${date}</td>
+      <td class="td-muted">${date}</td>
     </tr>`;
   }
 
   function statusBadge(s) {
     const map = {
       awaiting_fulfillment: ["badge-warning", "Esperando"],
-      allocated: ["badge-info", "Alocado"],
-      printed: ["badge-info", "Impreso"],
-      picked: ["badge-info", "Picked"],
-      ready_to_ship: ["badge-success", "Listo"],
-      shipped: ["badge-success", "Enviado"],
-      delivered: ["badge-success", "Entregado"],
-      cancelled: ["badge-danger", "Cancelado"],
-      refunded: ["badge-muted", "Reembolsado"],
+      allocated:   ["badge-blue",    "Alocado"],
+      printed:     ["badge-blue",    "Impreso"],
+      picked:      ["badge-blue",    "Picked"],
+      ready_to_ship: ["badge-success","Listo"],
+      shipped:     ["badge-success", "Enviado"],
+      delivered:   ["badge-success", "Entregado"],
+      cancelled:   ["badge-danger",  "Cancelado"],
+      refunded:    ["badge-muted",   "Reembolsado"],
     };
-    const [cls, label] = map[s] || ["badge-muted", s];
+    const [cls, label] = map[s] || ["badge-muted", s || "–"];
     return `<span class="badge ${cls}">${label}</span>`;
   }
 
   function orderStats(orders, containerId) {
-    const total = orders.length;
     const revenue = orders.reduce((s, o) => s + parseFloat(o.total_price || 0), 0);
     const items = orders.reduce((s, o) => s + (o.line_items?.length || 0), 0);
     document.getElementById(containerId).innerHTML = `
-      <div class="stat-card"><div class="stat-label">Órdenes</div><div class="stat-value" style="color:var(--accent)">${total}</div></div>
-      <div class="stat-card"><div class="stat-label">Revenue total</div><div class="stat-value" style="color:var(--success)">$${revenue.toFixed(0)}</div></div>
+      <div class="stat-card"><div class="stat-label">Órdenes</div><div class="stat-value blue">${orders.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue total</div><div class="stat-value green">$${revenue.toFixed(0)}</div></div>
       <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${items}</div></div>
     `;
   }
 
-  // =================== ACTIVE ORDERS ===================
-  const ACTIVE_STATUSES = "awaiting_fulfillment,allocated,printed,picked,ready_to_ship";
-
+  // ── ACTIVE ORDERS ──────────────────────────────────
   async function loadActiveOrders() {
     setLoading("ao-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: `status=${ACTIVE_STATUSES}&page_size=100&page=1` });
+      const data = await veeqoFetch("/orders", { params: `status=awaiting_fulfillment,allocated,printed,picked,ready_to_ship&page_size=100&page=1` });
       state.activeOrders.all = data;
       filterActiveOrders();
       orderStats(data, "ao-stats");
@@ -691,12 +699,10 @@
     const search = document.getElementById("ao-search").value.toLowerCase();
     const status = document.getElementById("ao-status-filter").value;
     state.activeOrders.filtered = state.activeOrders.all.filter(o => {
-      const matchSearch = !search ||
-        String(o.number).includes(search) ||
+      const matchSearch = !search || String(o.number).includes(search) ||
         o.deliver_to?.first_name?.toLowerCase().includes(search) ||
         o.customer?.email?.toLowerCase().includes(search);
-      const matchStatus = !status || o.status === status;
-      return matchSearch && matchStatus;
+      return matchSearch && (!status || o.status === status);
     });
     state.activeOrders.page = 1;
     renderActiveOrders();
@@ -704,26 +710,23 @@
 
   function renderActiveOrders() {
     const { filtered, page } = state.activeOrders;
-    const paged = paginate(filtered, page);
     const body = document.getElementById("ao-body");
     if (!filtered.length) {
       body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin órdenes activas</div></td></tr>`;
       document.getElementById("ao-pagination").innerHTML = "";
       return;
     }
-    body.innerHTML = paged.map(orderRow).join("");
+    body.innerHTML = paginate(filtered, page).map(orderRow).join("");
     renderPagination("ao-pagination", filtered.length, page, (p) => {
       state.activeOrders.page = p; renderActiveOrders();
     });
   }
 
-  // =================== HISTORY ===================
-  const HISTORY_STATUSES = "shipped,delivered,cancelled,refunded";
-
+  // ── HISTORY ────────────────────────────────────────
   async function loadHistory() {
     setLoading("hist-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: `status=${HISTORY_STATUSES}&page_size=100&page=1` });
+      const data = await veeqoFetch("/orders", { params: `status=shipped,delivered,cancelled,refunded&page_size=100&page=1` });
       state.history.all = data;
       filterHistory();
       orderStats(data, "hist-stats");
@@ -734,12 +737,10 @@
     const search = document.getElementById("hist-search").value.toLowerCase();
     const status = document.getElementById("hist-status-filter").value;
     state.history.filtered = state.history.all.filter(o => {
-      const matchSearch = !search ||
-        String(o.number).includes(search) ||
+      const matchSearch = !search || String(o.number).includes(search) ||
         o.deliver_to?.first_name?.toLowerCase().includes(search) ||
         o.customer?.email?.toLowerCase().includes(search);
-      const matchStatus = !status || o.status === status;
-      return matchSearch && matchStatus;
+      return matchSearch && (!status || o.status === status);
     });
     state.history.page = 1;
     renderHistory();
@@ -747,40 +748,38 @@
 
   function renderHistory() {
     const { filtered, page } = state.history;
-    const paged = paginate(filtered, page);
     const body = document.getElementById("hist-body");
     if (!filtered.length) {
       body.innerHTML = `<tr><td colspan="7"><div class="empty-state">Sin historial</div></td></tr>`;
       document.getElementById("hist-pagination").innerHTML = "";
       return;
     }
-    body.innerHTML = paged.map(orderRow).join("");
+    body.innerHTML = paginate(filtered, page).map(orderRow).join("");
     renderPagination("hist-pagination", filtered.length, page, (p) => {
       state.history.page = p; renderHistory();
     });
   }
 
-  // =================== HELPERS ===================
+  // ── HELPERS ────────────────────────────────────────
   function paginate(arr, page) {
     return arr.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   }
 
-  function renderPagination(containerId, total, page, onPage) {
+  function renderPagination(id, total, page, onPage) {
     const pages = Math.ceil(total / PAGE_SIZE);
-    if (pages <= 1) { document.getElementById(containerId).innerHTML = ""; return; }
-    document.getElementById(containerId).innerHTML = `
-      <span>${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE, total)} de ${total}</span>
+    if (pages <= 1) { document.getElementById(id).innerHTML = ""; return; }
+    document.getElementById(id).innerHTML = `
+      <span>${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,total)} de ${total}</span>
       <button class="page-btn" onclick="(${onPage})(${page-1})" ${page===1?"disabled":""}>← Anterior</button>
       <button class="page-btn" onclick="(${onPage})(${page+1})" ${page===pages?"disabled":""}>Siguiente →</button>
     `;
   }
 
-  function setLoading(tbodyId, cols) {
-    document.getElementById(tbodyId).innerHTML =
+  function setLoading(id, cols) {
+    document.getElementById(id).innerHTML =
       `<tr><td colspan="${cols}"><div class="loading-state"><div class="spinner"></div>Cargando...</div></td></tr>`;
   }
 
-  // =================== INIT ===================
   loadInventory();
 </script>
 </body>
