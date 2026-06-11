@@ -6,26 +6,6 @@
   <title>MyFullGuy — Portal de Clientes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-<script>
-const CLIENTS = {
-  "admin": {
-    name: "MyFullGuy Admin",
-    admin: true
-  },
-  "auron2024": {
-    name: "AURON",
-    brands: ["AURON"]
-  },
-  "porto2024": {
-    name: "Porto Boutique",
-    brands: ["Porto Boutique"]
-  },
-  "sofnova2024": {
-    name: "Sofnova",
-    brands: ["Fujian Yueke New Material Co., LTD."]
-  },
-};
-</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -43,32 +23,16 @@ const CLIENTS = {
     }
     body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    /* ACCESS SCREEN */
-    #access-screen {
-      display: none; position: fixed; inset: 0;
-      background: var(--bg); z-index: 1000;
-      align-items: center; justify-content: center;
-    }
+    /* ACCESS */
+    #access-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 1000; align-items: center; justify-content: center; }
     #access-screen.show { display: flex; }
-    .access-box {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 12px; padding: 2.5rem; width: 360px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;
-    }
+    .access-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; width: 360px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
     .access-logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
     .access-logo span { color: var(--blue); }
     .access-sub { color: var(--muted); font-size: 13px; margin-bottom: 2rem; }
-    .access-input {
-      width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 10px 14px; font-family: var(--font); font-size: 14px;
-      outline: none; margin-bottom: 1rem; transition: border-color .15s;
-    }
+    .access-input { width: 100%; border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-family: var(--font); font-size: 14px; outline: none; margin-bottom: 1rem; transition: border-color .15s; }
     .access-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-    .access-btn {
-      width: 100%; background: var(--blue); color: white; border: none;
-      border-radius: var(--radius); padding: 10px; font-family: var(--font);
-      font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
-    }
+    .access-btn { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 10px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; }
     .access-btn:hover { background: #1d4ed8; }
     .access-error { color: var(--danger); font-size: 12px; margin-top: 0.5rem; display: none; }
 
@@ -100,6 +64,7 @@ const CLIENTS = {
     .search-box:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
     .search-box::placeholder { color: var(--muted2); }
     select.filter-select { background: var(--white); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 13px; padding: 8px 12px; border-radius: var(--radius); outline: none; cursor: pointer; box-shadow: var(--shadow); }
+    select.filter-select:focus { border-color: var(--blue); }
     .btn-refresh { background: var(--white); border: 1px solid var(--border); color: var(--muted); font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: var(--radius); cursor: pointer; transition: all .15s; box-shadow: var(--shadow); margin-left: auto; }
     .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
 
@@ -124,12 +89,11 @@ const CLIENTS = {
     .badge-purple{background:var(--purple-light);color:var(--purple)}
     .badge-muted{background:#f3f4f6;color:var(--muted)}
 
-    /* STOCK CELLS */
     .stock-cell { display: flex; align-items: center; gap: 8px; }
     .stock-num { font-weight: 600; min-width: 28px; font-size: 13px; }
     .stock-bar { height: 4px; width: 48px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
     .stock-fill { height: 100%; border-radius: 99px; }
-    .stock-zero { color: var(--muted2); font-size: 12px; }
+    .stock-zero { color: var(--muted2); font-size: 13px; }
 
     .loading-state, .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 12px; color: var(--muted); font-size: 13px; }
     .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
@@ -160,7 +124,6 @@ const CLIENTS = {
   </div>
 </div>
 
-<!-- APP -->
 <header>
   <div class="logo">MyFullGuy <span>·</span> Portal</div>
   <div class="header-right">
@@ -182,6 +145,9 @@ const CLIENTS = {
   <section id="inventory" class="section active">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar producto o SKU..." oninput="filterInventory()" id="inv-search" />
+      <select class="filter-select" id="client-filter" onchange="filterByClient()" style="display:none">
+        <option value="">Todos los clientes</option>
+      </select>
       <select class="filter-select" id="brand-filter" onchange="filterInventory()">
         <option value="">Todas las marcas</option>
       </select>
@@ -214,6 +180,7 @@ const CLIENTS = {
       <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterActiveOrders()" id="ao-search" />
       <select class="filter-select" id="ao-status-filter" onchange="filterActiveOrders()">
         <option value="">Todos los estados</option>
+        <option value="awaiting_payment">Esperando pago</option>
         <option value="awaiting_fulfillment">Esperando fulfillment</option>
         <option value="allocated">Alocado</option>
         <option value="printed">Impreso</option>
@@ -281,6 +248,15 @@ const CLIENTS = {
 </main>
 
 <script>
+  // ── CLIENTS CONFIG ─────────────────────────────────
+  const CLIENTS = {
+    "admin": { name: "MyFullGuy Admin", admin: true },
+    "auron2024": { name: "AURON", brands: ["AURON"] },
+    "porto2024": { name: "Porto Boutique", brands: ["Porto Boutique"] },
+    "sofnova2024": { name: "Sofnova", brands: ["Fujian Yueke New Material Co., LTD."] },
+    "goota2024": { name: "Goota", brands: ["Goota"] },
+  };
+
   const API = "/.netlify/functions/veeqo";
   const PAGE_SIZE = 50;
   let currentClient = null;
@@ -305,10 +281,8 @@ const CLIENTS = {
     loadInventory();
   }
 
-  // Check URL token on load
   window.addEventListener('load', () => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
+    const token = new URLSearchParams(window.location.search).get('token');
     if (token && CLIENTS[token]) {
       document.getElementById("token-input").value = token;
       checkToken();
@@ -316,8 +290,16 @@ const CLIENTS = {
   });
 
   // ── CLIENT FILTER ──────────────────────────────────
-  function clientFilter(product) {
-    if (!currentClient || currentClient.admin) return true;
+  function clientFilterFn(product) {
+    if (!currentClient || currentClient.admin) {
+      // Admin: check if client filter dropdown is set
+      const sel = document.getElementById("client-filter");
+      const token = sel ? sel.value : "";
+      if (token && CLIENTS[token]?.brands) {
+        return CLIENTS[token].brands.includes(product.brand?.name);
+      }
+      return true;
+    }
     if (!currentClient.brands || currentClient.brands.length === 0) return true;
     return currentClient.brands.includes(product.brand?.name);
   }
@@ -342,8 +324,8 @@ const CLIENTS = {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(tab).classList.add("active");
     btn.classList.add("active");
-    if (tab === "active-orders" && state.activeOrders.all.length === 0) loadActiveOrders();
-    if (tab === "history" && state.history.all.length === 0) loadHistory();
+    if (tab === "active-orders") loadActiveOrders();
+    if (tab === "history") loadHistory();
   }
 
   // ── STOCK HELPERS ──────────────────────────────────
@@ -375,8 +357,7 @@ const CLIENTS = {
 
   function stockCell(n, type) {
     if (n === 0) return `<span class="stock-zero">—</span>`;
-    const max = 50;
-    const pct = Math.min(100, (n / max) * 100);
+    const pct = Math.min(100, (n / 50) * 100);
     const colors = { mfg: "#2563eb", fba: "#7c3aed", total: "#16a34a" };
     const color = colors[type] || "#16a34a";
     return `<div class="stock-cell">
@@ -390,24 +371,38 @@ const CLIENTS = {
     setLoading("inv-body", 6);
     try {
       const data = await veeqoFetch("/products");
-      const filtered = data.filter(clientFilter);
-      state.inventory.all = filtered;
-      buildBrandFilter(filtered);
+      state.inventory.all = data;
+      buildFilters(data);
       filterInventory();
-      renderInvStats(filtered);
+      renderInvStats(state.inventory.filtered);
     } catch(e) { showError("No se pudo cargar el inventario: " + e.message); }
   }
 
-  function buildBrandFilter(products) {
-    if (!currentClient || currentClient.admin) {
-      const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
-      const sel = document.getElementById("brand-filter");
-      sel.innerHTML = `<option value="">Todas las marcas</option>` +
-        brands.map(b => `<option value="${b}">${b}</option>`).join("");
-      sel.parentElement.style.display = "";
+  function buildFilters(products) {
+    // Brand filter
+    const brands = [...new Set(products.map(p => p.brand?.name).filter(Boolean))].sort();
+    const brandSel = document.getElementById("brand-filter");
+    brandSel.innerHTML = `<option value="">Todas las marcas</option>` +
+      brands.map(b => `<option value="${b}">${b}</option>`).join("");
+
+    // Client filter (admin only)
+    const clientSel = document.getElementById("client-filter");
+    if (currentClient?.admin) {
+      clientSel.style.display = "";
+      clientSel.innerHTML = `<option value="">Todos los clientes</option>` +
+        Object.entries(CLIENTS)
+          .filter(([,c]) => !c.admin && c.brands)
+          .map(([token, c]) => `<option value="${token}">${c.name}</option>`)
+          .join("");
     } else {
-      document.getElementById("brand-filter").parentElement.style.display = "none";
+      clientSel.style.display = "none";
     }
+  }
+
+  function filterByClient() {
+    // Reset brand filter when client changes
+    document.getElementById("brand-filter").value = "";
+    filterInventory();
   }
 
   function filterInventory() {
@@ -415,32 +410,32 @@ const CLIENTS = {
     const brand  = document.getElementById("brand-filter").value;
     state.inventory.filtered = state.inventory.all.filter(p => {
       const { sku } = getProductStocks(p);
-      const matchSearch = !search ||
-        p.title?.toLowerCase().includes(search) ||
-        sku.toLowerCase().includes(search);
-      return matchSearch && (!brand || p.brand?.name === brand);
+      const matchSearch = !search || p.title?.toLowerCase().includes(search) || sku.toLowerCase().includes(search);
+      const matchBrand  = !brand || p.brand?.name === brand;
+      const matchClient = clientFilterFn(p);
+      return matchSearch && matchBrand && matchClient;
     });
     state.inventory.page = 1;
     renderInventory();
+    renderInvStats(state.inventory.filtered);
   }
 
   function sortInv(key) {
     const s = state.inventory;
     s.sortDir = s.sortKey === key ? -s.sortDir : -1;
     s.sortKey = key;
-    updateSortIcons('', key, s.sortDir, ['title','sku','brand','mfg','fba','total']);
+    updateSortIcons('si-', key, s.sortDir, ['title','sku','brand','mfg','fba','total']);
     s.filtered.sort((a, b) => {
       const as = getProductStocks(a), bs = getProductStocks(b);
-      if (key === 'title') return (a.title||'').localeCompare(b.title||'') * s.sortDir;
-      if (key === 'sku')   return as.sku.localeCompare(bs.sku) * s.sortDir;
-      if (key === 'brand') return (a.brand?.name||'').localeCompare(b.brand?.name||'') * s.sortDir;
-      if (key === 'mfg')   return (as.mfg - bs.mfg) * s.sortDir;
-      if (key === 'fba')   return (as.fba - bs.fba) * s.sortDir;
-      if (key === 'total') return (as.total - bs.total) * s.sortDir;
+      if (key==='title') return (a.title||'').localeCompare(b.title||'') * s.sortDir;
+      if (key==='sku')   return as.sku.localeCompare(bs.sku) * s.sortDir;
+      if (key==='brand') return (a.brand?.name||'').localeCompare(b.brand?.name||'') * s.sortDir;
+      if (key==='mfg')   return (as.mfg - bs.mfg) * s.sortDir;
+      if (key==='fba')   return (as.fba - bs.fba) * s.sortDir;
+      if (key==='total') return (as.total - bs.total) * s.sortDir;
       return 0;
     });
-    s.page = 1;
-    renderInventory();
+    s.page = 1; renderInventory();
   }
 
   function renderInventory() {
@@ -462,11 +457,11 @@ const CLIENTS = {
         <td>${stockCell(total,'total')}</td>
       </tr>`;
     }).join("");
-    renderPagination("inv-pagination", filtered.length, page, p => { state.inventory.page = p; renderInventory(); });
+    renderPagination("inv-pagination", filtered.length, page, p => { state.inventory.page=p; renderInventory(); });
   }
 
   function renderInvStats(products) {
-    let totalMfg = 0, totalFba = 0, outOfStock = 0;
+    let totalMfg=0, totalFba=0, outOfStock=0;
     for (const p of products) {
       const { mfg, fba, total } = getProductStocks(p);
       totalMfg += mfg; totalFba += fba;
@@ -503,22 +498,28 @@ const CLIENTS = {
 
   function statusBadge(s) {
     const map = {
-      awaiting_fulfillment:["badge-warning","Esperando"],
-      allocated:["badge-blue","Alocado"], printed:["badge-blue","Impreso"],
-      picked:["badge-blue","Picked"], ready_to_ship:["badge-success","Listo"],
-      shipped:["badge-success","Enviado"], delivered:["badge-success","Entregado"],
-      cancelled:["badge-danger","Cancelado"], refunded:["badge-muted","Reembolsado"],
+      awaiting_payment:     ["badge-warning","Esp. pago"],
+      awaiting_fulfillment: ["badge-warning","Esperando"],
+      allocated:   ["badge-blue",   "Alocado"],
+      printed:     ["badge-blue",   "Impreso"],
+      picked:      ["badge-blue",   "Picked"],
+      ready_to_ship:["badge-success","Listo"],
+      shipped:     ["badge-success","Enviado"],
+      delivered:   ["badge-success","Entregado"],
+      cancelled:   ["badge-danger", "Cancelado"],
+      refunded:    ["badge-muted",  "Reembolsado"],
     };
-    const [cls,label] = map[s]||["badge-muted",s||"–"];
+    const [cls,label] = map[s]||["badge-muted", s||"–"];
     return `<span class="badge ${cls}">${label}</span>`;
   }
 
   function orderStats(orders, id) {
-    const revenue = orders.reduce((s,o) => s + parseFloat(o.total_price||0), 0);
+    const revenue = orders.reduce((s,o) => s+parseFloat(o.total_price||0), 0);
+    const items   = orders.reduce((s,o) => s+(o.line_items?.length||0), 0);
     document.getElementById(id).innerHTML = `
       <div class="stat-card"><div class="stat-label">Órdenes</div><div class="stat-value c-blue">${orders.length}</div></div>
       <div class="stat-card"><div class="stat-label">Revenue total</div><div class="stat-value c-green">$${revenue.toFixed(0)}</div></div>
-      <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${orders.reduce((s,o)=>s+(o.line_items?.length||0),0)}</div></div>
+      <div class="stat-card"><div class="stat-label">Items totales</div><div class="stat-value">${items}</div></div>
     `;
   }
 
@@ -526,7 +527,7 @@ const CLIENTS = {
     const s = state[tab==='ao'?'activeOrders':'history'];
     s.sortDir = s.sortKey===key ? -s.sortDir : -1;
     s.sortKey = key;
-    updateSortIcons(tab+'-', key, s.sortDir, ['number','customer','items','total','channel','status','date']);
+    updateSortIcons(`${tab}-si-`, key, s.sortDir, ['number','customer','items','total','channel','status','date']);
     s.filtered.sort((a,b) => {
       if (key==='number')   return (parseFloat(a.number||0)-parseFloat(b.number||0))*s.sortDir;
       if (key==='customer') return getOrderCustomer(a).localeCompare(getOrderCustomer(b))*s.sortDir;
@@ -541,14 +542,18 @@ const CLIENTS = {
     tab==='ao' ? renderActiveOrders() : renderHistory();
   }
 
+  const ACTIVE_STATUSES = new Set(['awaiting_payment','awaiting_fulfillment','allocated','printed','picked','ready_to_ship']);
+  const HISTORY_STATUSES = new Set(['shipped','delivered','cancelled','refunded']);
+
   async function loadActiveOrders() {
     setLoading("ao-body", 7);
     try {
       const data = await veeqoFetch("/orders");
-      state.activeOrders.all = data;
-      state.activeOrders.filtered = [...data];
-      renderActiveOrders();
-      orderStats(data, "ao-stats");
+      const active = data.filter(o => ACTIVE_STATUSES.has(o.status));
+      state.activeOrders.all = active;
+      state.activeOrders.filtered = [...active];
+      filterActiveOrders();
+      orderStats(active, "ao-stats");
     } catch(e) { showError("No se pudo cargar órdenes activas: " + e.message); }
   }
 
@@ -573,11 +578,12 @@ const CLIENTS = {
   async function loadHistory() {
     setLoading("hist-body", 7);
     try {
-      const data = await veeqoFetch("/orders", { params: "status=shipped,delivered,cancelled,refunded" });
-      state.history.all = data;
-      state.history.filtered = [...data];
-      renderHistory();
-      orderStats(data, "hist-stats");
+      const data = await veeqoFetch("/orders");
+      const hist = data.filter(o => HISTORY_STATUSES.has(o.status));
+      state.history.all = hist;
+      state.history.filtered = [...hist];
+      filterHistory();
+      orderStats(hist, "hist-stats");
     } catch(e) { showError("No se pudo cargar el historial: " + e.message); }
   }
 
@@ -617,12 +623,11 @@ const CLIENTS = {
 
   function updateSortIcons(prefix, activeKey, dir, keys) {
     keys.forEach(k => {
-      const el = document.getElementById(`${prefix}si-${k}`);
+      const el = document.getElementById(`${prefix}${k}`);
       if (!el) return;
-      const th = el.parentElement;
-      th.classList.remove('sort-asc','sort-desc');
+      el.parentElement.classList.remove('sort-asc','sort-desc');
       el.textContent = '↕';
-      if (k===activeKey) { th.classList.add(dir===1?'sort-asc':'sort-desc'); el.textContent=dir===1?'↑':'↓'; }
+      if (k===activeKey) { el.parentElement.classList.add(dir===1?'sort-asc':'sort-desc'); el.textContent=dir===1?'↑':'↓'; }
     });
   }
 </script>
