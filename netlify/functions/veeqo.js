@@ -25,6 +25,8 @@ exports.handler = async (event) => {
     while (true) {
       const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 const timeFilter = endpoint === '/orders' ? `&updated_at_min=${since}` : '';
+const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+const timeFilter = endpoint === '/orders' ? `&updated_at_min=${since}` : '';
 const url = `${VEEQO_BASE}${endpoint}?${baseParams}page_size=100&page=${page}${timeFilter}`;
       const res = await fetch(url, {
         headers: { "x-api-key": VEEQO_API_KEY, "Content-Type": "application/json" },
