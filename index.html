@@ -6,6 +6,7 @@
   <title>MyFullGuy — Portal de Clientes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -23,6 +24,7 @@
     }
     body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
+    /* ACCESS */
     #access-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 1000; align-items: center; justify-content: center; }
     #access-screen.show { display: flex; }
     .access-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; width: 360px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
@@ -35,6 +37,7 @@
     .access-btn:hover { background: #1d4ed8; }
     .access-error { color: var(--danger); font-size: 12px; margin-top: 0.5rem; display: none; }
 
+    /* HEADER */
     header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
     .logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
     .logo span { color: var(--blue); }
@@ -51,12 +54,34 @@
 
     main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
 
+    /* STATS */
     .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); }
     .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted2); margin-bottom: 6px; }
     .stat-value { font-size: 2rem; font-weight: 600; line-height: 1; }
-    .c-blue{color:var(--blue)} .c-green{color:var(--success)} .c-red{color:var(--danger)} .c-purple{color:var(--purple)}
+    .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .stat-sub.up { color: var(--success); }
+    .stat-sub.down { color: var(--danger); }
+    .c-blue{color:var(--blue)} .c-green{color:var(--success)} .c-red{color:var(--danger)} .c-purple{color:var(--purple)} .c-orange{color:var(--warning)}
 
+    /* DASHBOARD */
+    .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .dash-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } .dash-grid-3 { grid-template-columns: 1fr; } }
+    .chart-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+    .chart-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 1.25rem; }
+    .chart-title span { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 6px; }
+    .chart-wrap { position: relative; height: 200px; }
+
+    /* TOP PRODUCTS */
+    .top-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .top-item:last-child { border-bottom: none; }
+    .top-rank { font-size: 11px; font-weight: 700; color: var(--muted2); width: 18px; text-align: center; }
+    .top-name { flex: 1; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-qty { font-size: 12px; font-weight: 600; color: var(--blue); }
+    .top-rev { font-size: 11px; color: var(--muted); }
+
+    /* TOOLBAR */
     .toolbar { display: flex; gap: .75rem; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
     .search-box { background: var(--white); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 13px; padding: 8px 12px 8px 34px; border-radius: var(--radius); outline: none; transition: border-color .15s; min-width: 220px; box-shadow: var(--shadow); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 10px center; }
     .search-box:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
@@ -65,6 +90,7 @@
     .btn-refresh { background: var(--white); border: 1px solid var(--border); color: var(--muted); font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: var(--radius); cursor: pointer; transition: all .15s; box-shadow: var(--shadow); margin-left: auto; }
     .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
 
+    /* TABLE */
     .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #fafafa; border-bottom: 1px solid var(--border); }
@@ -127,7 +153,8 @@
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="switchTab('inventory', this)">Inventario</button>
+  <button class="tab-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('inventory', this)">Inventario</button>
   <button class="tab-btn" onclick="switchTab('active-orders', this)">Órdenes Activas</button>
   <button class="tab-btn" onclick="switchTab('history', this)">Historial</button>
 </nav>
@@ -135,7 +162,35 @@
 <main>
   <div id="error-container"></div>
 
-  <section id="inventory" class="section active">
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="section active">
+    <div class="stats-row" id="dash-stats">
+      <div class="stat-card"><div class="loading-state" style="padding:1rem"><div class="spinner"></div></div></div>
+    </div>
+    <div class="dash-grid">
+      <div class="chart-card">
+        <div class="chart-title">Ventas diarias <span>últimos 30 días</span></div>
+        <div class="chart-wrap"><canvas id="chart-sales"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Órdenes por canal</div>
+        <div class="chart-wrap"><canvas id="chart-channels"></canvas></div>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="chart-card">
+        <div class="chart-title">Top productos <span>por unidades vendidas</span></div>
+        <div id="top-products"><div class="loading-state" style="padding:2rem"><div class="spinner"></div></div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Estados de órdenes</div>
+        <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVENTARIO -->
+  <section id="inventory" class="section">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar producto o SKU..." oninput="filterInventory()" id="inv-search" />
       <select class="filter-select" id="client-filter" onchange="filterByClient()" style="display:none">
@@ -163,6 +218,7 @@
     <div class="pagination" id="inv-pagination"></div>
   </section>
 
+  <!-- ÓRDENES ACTIVAS -->
   <section id="active-orders" class="section">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterActiveOrders()" id="ao-search" />
@@ -195,6 +251,7 @@
     <div class="pagination" id="ao-pagination"></div>
   </section>
 
+  <!-- HISTORIAL -->
   <section id="history" class="section">
     <div class="toolbar">
       <input class="search-box" type="text" placeholder="Buscar por número o cliente..." oninput="filterHistory()" id="hist-search" />
@@ -230,34 +287,22 @@
   // ── CLIENTS ────────────────────────────────────────
   const CLIENTS = {
     "admin": { name: "MyFullGuy Admin", admin: true },
-    "auron2024": {
-      name: "AURON",
-      brands: ["AURON"],
-      channels: ["Auron Smart FBA", "Auron Smart"]
-    },
-    "goota2024": {
-      name: "Goota",
-      brands: ["Goota"],
-      channels: ["Goota Amazon Seller FBA", "Goota Amazon Seller", "Goota Shopify Store"]
-    },
-    "sofnova2024": {
-      name: "Sofnova",
-      brands: ["Aquila - Dinamic"],
-      channels: ["Sofnova - Backpack FBA", "Sofnova - Backpack"]
-    },
-    "porto2024": {
-      name: "Porto Boutique",
-      brands: ["Porto Boutique", "Ruh Natural"],
-      channels: ["Porto Boutique Shopify channel", "Porto Walmart channel", "Etsy Store", "Amazon Channel", "Amazon Channel FBA", "Merged Orders"]
-    },
+    "auron2024": { name: "AURON", brands: ["AURON"], channels: ["Auron Smart FBA", "Auron Smart"] },
+    "goota2024": { name: "Goota", brands: ["Goota"], channels: ["Goota Amazon Seller FBA", "Goota Amazon Seller", "Goota Shopify Store"] },
+    "sofnova2024": { name: "Sofnova", brands: ["Aquila - Dinamic"], channels: ["Sofnova - Backpack FBA", "Sofnova - Backpack"] },
+    "porto2024": { name: "Porto Boutique", brands: ["Porto Boutique", "Ruh Natural"], channels: ["Porto Boutique Shopify channel", "Porto Walmart channel", "Etsy Store", "Amazon Channel", "Amazon Channel FBA", "Merged Orders"] },
   };
 
   const API = "/.netlify/functions/veeqo";
   const PAGE_SIZE = 50;
+  const EXCLUDED_BRANDS = ["Generic", "Fujian Yueke New Material Co., LTD.", "Ruh Naturals"];
   const ACTIVE_STATUSES = new Set(['awaiting_payment','awaiting_fulfillment','allocated','printed','picked','ready_to_ship']);
   const HISTORY_STATUSES = new Set(['shipped','delivered','cancelled','refunded']);
 
   let currentClient = null;
+  let allOrders = []; // shared cache for dashboard
+  let charts = {};
+
   let state = {
     inventory:    { all: [], filtered: [], page: 1, sortKey: '', sortDir: -1 },
     activeOrders: { all: [], filtered: [], page: 1, sortKey: '', sortDir: -1 },
@@ -272,6 +317,7 @@
     currentClient = client;
     document.getElementById("access-screen").classList.remove("show");
     document.getElementById("client-name-badge").textContent = client.name;
+    loadDashboard();
     loadInventory();
   }
 
@@ -324,6 +370,190 @@
     if (tab === "history") loadHistory();
   }
 
+  // ── DASHBOARD ──────────────────────────────────────
+  async function loadDashboard() {
+    try {
+      const data = await veeqoFetch("/orders");
+      const client = getActiveClientFilter();
+      allOrders = data.filter(o => orderMatchesClient(o, client));
+      renderDashboard(allOrders);
+    } catch(e) { showError("No se pudo cargar el dashboard: " + e.message); }
+  }
+
+  function renderDashboard(orders) {
+    const now = new Date();
+    const days30 = new Date(now - 30 * 86400000);
+    const days60 = new Date(now - 60 * 86400000);
+
+    const recent   = orders.filter(o => new Date(o.created_at) >= days30);
+    const previous = orders.filter(o => { const d = new Date(o.created_at); return d >= days60 && d < days30; });
+
+    const revenue30  = recent.reduce((s,o) => s + parseFloat(o.total_price||0), 0);
+    const revPrev    = previous.reduce((s,o) => s + parseFloat(o.total_price||0), 0);
+    const revChange  = revPrev > 0 ? ((revenue30 - revPrev) / revPrev * 100).toFixed(0) : null;
+
+    const shipped30  = recent.filter(o => o.status === 'shipped' || o.status === 'delivered').length;
+    const active30   = recent.filter(o => ACTIVE_STATUSES.has(o.status)).length;
+    const cancelled30 = recent.filter(o => o.status === 'cancelled').length;
+
+    // Stats
+    document.getElementById("dash-stats").innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">Revenue (30 días)</div>
+        <div class="stat-value c-green">$${revenue30.toFixed(0)}</div>
+        ${revChange !== null ? `<div class="stat-sub ${revChange >= 0 ? 'up' : 'down'}">${revChange >= 0 ? '↑' : '↓'} ${Math.abs(revChange)}% vs mes anterior</div>` : ''}
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Órdenes (30 días)</div>
+        <div class="stat-value c-blue">${recent.length}</div>
+        <div class="stat-sub">${previous.length} mes anterior</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Enviadas</div>
+        <div class="stat-value c-green">${shipped30}</div>
+        <div class="stat-sub">últimos 30 días</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Activas ahora</div>
+        <div class="stat-value c-blue">${active30}</div>
+        <div class="stat-sub">en proceso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Canceladas</div>
+        <div class="stat-value c-red">${cancelled30}</div>
+        <div class="stat-sub">últimos 30 días</div>
+      </div>
+    `;
+
+    // Sales by day chart
+    const salesByDay = {};
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now - i * 86400000);
+      const key = d.toISOString().split('T')[0];
+      salesByDay[key] = 0;
+    }
+    recent.forEach(o => {
+      const key = o.created_at?.split('T')[0];
+      if (key && salesByDay[key] !== undefined) salesByDay[key] += parseFloat(o.total_price||0);
+    });
+
+    const labels = Object.keys(salesByDay).map(d => {
+      const [,m,day] = d.split('-');
+      return `${day}/${m}`;
+    });
+
+    destroyChart('sales');
+    charts.sales = new Chart(document.getElementById('chart-sales'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          data: Object.values(salesByDay),
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.08)',
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          fill: true,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10 }, maxTicksLimit: 8 } },
+          y: { grid: { color: '#f0f0ee' }, ticks: { font: { size: 10 }, callback: v => `$${v}` } }
+        }
+      }
+    });
+
+    // Channels chart
+    const channelCounts = {};
+    recent.forEach(o => {
+      const ch = o.channel?.name || 'Sin canal';
+      channelCounts[ch] = (channelCounts[ch] || 0) + 1;
+    });
+    const chLabels = Object.keys(channelCounts);
+    const chColors = ['#2563eb','#7c3aed','#16a34a','#d97706','#dc2626','#0891b2','#9ca3af'];
+
+    destroyChart('channels');
+    charts.channels = new Chart(document.getElementById('chart-channels'), {
+      type: 'doughnut',
+      data: {
+        labels: chLabels,
+        datasets: [{ data: Object.values(channelCounts), backgroundColor: chColors.slice(0, chLabels.length), borderWidth: 0 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 10, boxWidth: 10 } }
+        }
+      }
+    });
+
+    // Status chart
+    const statusMap = { shipped:'Enviado', delivered:'Entregado', cancelled:'Cancelado', refunded:'Reembolsado', awaiting_payment:'Esp. pago', awaiting_fulfillment:'Esperando' };
+    const statusCounts = {};
+    recent.forEach(o => {
+      const label = statusMap[o.status] || o.status || 'Otro';
+      statusCounts[label] = (statusCounts[label] || 0) + 1;
+    });
+    const stColors = { 'Enviado':'#16a34a','Entregado':'#16a34a','Cancelado':'#dc2626','Reembolsado':'#9ca3af','Esp. pago':'#d97706','Esperando':'#d97706','Otro':'#9ca3af' };
+
+    destroyChart('status');
+    charts.status = new Chart(document.getElementById('chart-status'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(statusCounts),
+        datasets: [{
+          data: Object.values(statusCounts),
+          backgroundColor: Object.keys(statusCounts).map(k => stColors[k] || '#9ca3af'),
+          borderRadius: 4,
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+          y: { grid: { color: '#f0f0ee' }, ticks: { font: { size: 10 }, stepSize: 1 } }
+        }
+      }
+    });
+
+    // Top products
+    const productSales = {};
+    recent.forEach(o => {
+      (o.line_items || []).forEach(item => {
+        const name = item.sellable?.product_title || item.sellable?.full_title || 'Desconocido';
+        const sku  = item.sellable?.sku_code || '';
+        const qty  = item.quantity || 1;
+        const rev  = parseFloat(o.total_price || 0) / (o.line_items?.length || 1);
+        if (!productSales[sku]) productSales[sku] = { name, sku, qty: 0, rev: 0 };
+        productSales[sku].qty += qty;
+        productSales[sku].rev += rev;
+      });
+    });
+
+    const topProducts = Object.values(productSales).sort((a,b) => b.qty - a.qty).slice(0, 8);
+    document.getElementById('top-products').innerHTML = topProducts.length
+      ? topProducts.map((p, i) => `
+          <div class="top-item">
+            <span class="top-rank">${i+1}</span>
+            <span class="top-name" title="${p.name}">${p.name}</span>
+            <span class="top-rev td-muted">$${p.rev.toFixed(0)}</span>
+            <span class="top-qty">${p.qty} u.</span>
+          </div>`)
+        .join('')
+      : '<div class="empty-state" style="padding:2rem">Sin datos</div>';
+  }
+
+  function destroyChart(key) {
+    if (charts[key]) { charts[key].destroy(); charts[key] = null; }
+  }
+
   // ── STOCK ──────────────────────────────────────────
   function getWarehouseStock(sellable, type) {
     if (!sellable.stock_entries) return 0;
@@ -362,8 +592,6 @@
     setLoading("inv-body", 6);
     try {
       const data = await veeqoFetch("/products");
-      // Exclude generic/unwanted brands
-      const EXCLUDED_BRANDS = ["Generic", "Fujian Yueke New Material Co., LTD.", "Ruh Naturals"];
       state.inventory.all = data.filter(p => !EXCLUDED_BRANDS.includes(p.brand?.name));
       buildFilters(state.inventory.all);
       filterInventory();
@@ -377,24 +605,14 @@
       clientSel.innerHTML = `<option value="">Todos los clientes</option>` +
         Object.entries(CLIENTS).filter(([,c]) => !c.admin && c.brands)
           .map(([token,c]) => `<option value="${token}">${c.name}</option>`).join("");
-    } else {
-      clientSel.style.display = "none";
-    }
+    } else { clientSel.style.display = "none"; }
 
     const activeClient = getActiveClientFilter();
-    const visibleProducts = products.filter(p => productMatchesClient(p, activeClient));
-    const brands = [...new Set(visibleProducts.map(p => p.brand?.name).filter(Boolean))].sort();
+    const visible = products.filter(p => productMatchesClient(p, activeClient));
+    const brands = [...new Set(visible.map(p => p.brand?.name).filter(Boolean))].sort();
     const brandSel = document.getElementById("brand-filter");
-    if (currentClient?.admin && !activeClient) {
-      brandSel.style.display = "";
-      brandSel.innerHTML = `<option value="">Todas las marcas</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join("");
-    } else if (currentClient?.admin && activeClient) {
-      brandSel.style.display = brands.length > 1 ? "" : "none";
-      brandSel.innerHTML = `<option value="">Todas las marcas</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join("");
-    } else {
-      brandSel.style.display = brands.length > 1 ? "" : "none";
-      brandSel.innerHTML = `<option value="">Todas las marcas</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join("");
-    }
+    brandSel.style.display = brands.length > 1 ? "" : "none";
+    brandSel.innerHTML = `<option value="">Todas las marcas</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join("");
   }
 
   function filterByClient() {
@@ -403,17 +621,41 @@
     filterInventory();
   }
 
+  // Expand products into one row per sellable/variant
+  function expandToVariants(products) {
+    const rows = [];
+    for (const p of products) {
+      if (!p.sellables?.length) {
+        rows.push({ productTitle: p.title||"–", brand: p.brand?.name||"–", sku:"–", mfg:0, fba:0, total:0 });
+        continue;
+      }
+      for (const s of p.sellables) {
+        const mfg = getWarehouseStock(s, 'mfg');
+        const fba = getWarehouseStock(s, 'fba');
+        const total = s.stock_level_at_all_warehouses || 0;
+        const variantLabel = s.sellable_title && s.sellable_title !== 'Default' ? ` — ${s.sellable_title}` : '';
+        rows.push({
+          productTitle: (p.title||"–") + variantLabel,
+          brand: p.brand?.name||"–",
+          sku: s.sku_code||"–",
+          mfg, fba, total
+        });
+      }
+    }
+    return rows;
+  }
+
   function filterInventory() {
     const search = document.getElementById("inv-search").value.toLowerCase();
     const brand  = document.getElementById("brand-filter").value;
     const activeClient = getActiveClientFilter();
-    state.inventory.filtered = state.inventory.all.filter(p => {
-      const { sku } = getProductStocks(p);
-      const matchSearch = !search || p.title?.toLowerCase().includes(search) || sku.toLowerCase().includes(search);
-      const matchBrand  = !brand || p.brand?.name === brand;
-      const matchClient = productMatchesClient(p, activeClient);
-      return matchSearch && matchBrand && matchClient;
-    });
+    const filteredProducts = state.inventory.all.filter(p =>
+      (!brand || p.brand?.name === brand) && productMatchesClient(p, activeClient)
+    );
+    const variants = expandToVariants(filteredProducts);
+    state.inventory.filtered = variants.filter(v =>
+      !search || v.productTitle.toLowerCase().includes(search) || v.sku.toLowerCase().includes(search)
+    );
     state.inventory.page = 1;
     renderInventory();
     renderInvStats(state.inventory.filtered);
@@ -421,17 +663,15 @@
 
   function sortInv(key) {
     const s = state.inventory;
-    s.sortDir = s.sortKey===key ? -s.sortDir : -1;
-    s.sortKey = key;
+    s.sortDir = s.sortKey===key ? -s.sortDir : -1; s.sortKey = key;
     updateSortIcons('si-', key, s.sortDir, ['title','sku','brand','mfg','fba','total']);
     s.filtered.sort((a,b) => {
-      const as=getProductStocks(a), bs=getProductStocks(b);
-      if (key==='title') return (a.title||'').localeCompare(b.title||'')*s.sortDir;
-      if (key==='sku')   return as.sku.localeCompare(bs.sku)*s.sortDir;
-      if (key==='brand') return (a.brand?.name||'').localeCompare(b.brand?.name||'')*s.sortDir;
-      if (key==='mfg')   return (as.mfg-bs.mfg)*s.sortDir;
-      if (key==='fba')   return (as.fba-bs.fba)*s.sortDir;
-      if (key==='total') return (as.total-bs.total)*s.sortDir;
+      if (key==='title') return a.productTitle.localeCompare(b.productTitle)*s.sortDir;
+      if (key==='sku')   return a.sku.localeCompare(b.sku)*s.sortDir;
+      if (key==='brand') return a.brand.localeCompare(b.brand)*s.sortDir;
+      if (key==='mfg')   return (a.mfg-b.mfg)*s.sortDir;
+      if (key==='fba')   return (a.fba-b.fba)*s.sortDir;
+      if (key==='total') return (a.total-b.total)*s.sortDir;
       return 0;
     });
     s.page=1; renderInventory();
@@ -441,32 +681,25 @@
     const { filtered, page } = state.inventory;
     const body = document.getElementById("inv-body");
     if (!filtered.length) { body.innerHTML=`<tr><td colspan="6"><div class="empty-state">Sin resultados</div></td></tr>`; document.getElementById("inv-pagination").innerHTML=""; return; }
-    body.innerHTML = paginate(filtered,page).map(p => {
-      const { mfg,fba,total,sku } = getProductStocks(p);
-      return `<tr>
-        <td style="max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(p.title||'').replace(/"/g,"'")}">${p.title||"–"}</td>
-        <td class="td-mono">${sku}</td>
-        <td class="td-muted">${p.brand?.name||"–"}</td>
-        <td>${stockCell(mfg,'mfg')}</td>
-        <td>${stockCell(fba,'fba')}</td>
-        <td>${stockCell(total,'total')}</td>
-      </tr>`;
-    }).join("");
+    body.innerHTML = paginate(filtered,page).map(v => `<tr>
+      <td style="max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${v.productTitle.replace(/"/g,"'")}">${v.productTitle}</td>
+      <td class="td-mono">${v.sku}</td>
+      <td class="td-muted">${v.brand}</td>
+      <td>${stockCell(v.mfg,'mfg')}</td>
+      <td>${stockCell(v.fba,'fba')}</td>
+      <td>${stockCell(v.total,'total')}</td>
+    </tr>`).join("");
     renderPagination("inv-pagination", filtered.length, page, p=>{ state.inventory.page=p; renderInventory(); });
   }
 
-  function renderInvStats(products) {
-    let totalMfg=0, totalFba=0, outOfStock=0;
-    for (const p of products) {
-      const { mfg,fba,total } = getProductStocks(p);
-      totalMfg+=mfg; totalFba+=fba;
-      if (total===0) outOfStock++;
-    }
+  function renderInvStats(variants) {
+    let mfg=0, fba=0, out=0;
+    for (const v of variants) { mfg+=v.mfg; fba+=v.fba; if(v.total===0)out++; }
     document.getElementById("inv-stats").innerHTML = `
-      <div class="stat-card"><div class="stat-label">Productos</div><div class="stat-value c-blue">${products.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Stock MyFullGuy</div><div class="stat-value c-blue">${totalMfg}</div></div>
-      <div class="stat-card"><div class="stat-label">Stock Amazon FBA</div><div class="stat-value c-purple">${totalFba}</div></div>
-      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value c-red">${outOfStock}</div></div>`;
+      <div class="stat-card"><div class="stat-label">SKUs</div><div class="stat-value c-blue">${variants.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Stock MyFullGuy</div><div class="stat-value c-blue">${mfg}</div></div>
+      <div class="stat-card"><div class="stat-label">Stock Amazon FBA</div><div class="stat-value c-purple">${fba}</div></div>
+      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value c-red">${out}</div></div>`;
   }
 
   // ── ORDERS ─────────────────────────────────────────
@@ -489,14 +722,7 @@
   }
 
   function statusBadge(s) {
-    const map = {
-      awaiting_payment:["badge-warning","Esp. pago"],
-      awaiting_fulfillment:["badge-warning","Esperando"],
-      allocated:["badge-blue","Alocado"], printed:["badge-blue","Impreso"],
-      picked:["badge-blue","Picked"], ready_to_ship:["badge-success","Listo"],
-      shipped:["badge-success","Enviado"], delivered:["badge-success","Entregado"],
-      cancelled:["badge-danger","Cancelado"], refunded:["badge-muted","Reembolsado"],
-    };
+    const map = { awaiting_payment:["badge-warning","Esp. pago"], awaiting_fulfillment:["badge-warning","Esperando"], allocated:["badge-blue","Alocado"], printed:["badge-blue","Impreso"], picked:["badge-blue","Picked"], ready_to_ship:["badge-success","Listo"], shipped:["badge-success","Enviado"], delivered:["badge-success","Entregado"], cancelled:["badge-danger","Cancelado"], refunded:["badge-muted","Reembolsado"] };
     const [cls,label] = map[s]||["badge-muted",s||"–"];
     return `<span class="badge ${cls}">${label}</span>`;
   }
@@ -512,8 +738,7 @@
 
   function sortOrders(tab, key) {
     const s = state[tab==='ao'?'activeOrders':'history'];
-    s.sortDir = s.sortKey===key ? -s.sortDir : -1;
-    s.sortKey = key;
+    s.sortDir = s.sortKey===key ? -s.sortDir : -1; s.sortKey = key;
     updateSortIcons(`${tab}-si-`, key, s.sortDir, ['number','customer','items','total','channel','status','date']);
     s.filtered.sort((a,b) => {
       if (key==='number')   return (parseFloat(a.number||0)-parseFloat(b.number||0))*s.sortDir;
@@ -532,8 +757,8 @@
     setLoading("ao-body", 7);
     try {
       const data = await veeqoFetch("/orders");
-      const activeClient = getActiveClientFilter();
-      const filtered = data.filter(o => ACTIVE_STATUSES.has(o.status) && orderMatchesClient(o, activeClient));
+      const client = getActiveClientFilter();
+      const filtered = data.filter(o => ACTIVE_STATUSES.has(o.status) && orderMatchesClient(o, client));
       state.activeOrders.all = filtered;
       state.activeOrders.filtered = [...filtered];
       renderActiveOrders();
@@ -563,8 +788,8 @@
     setLoading("hist-body", 7);
     try {
       const data = await veeqoFetch("/orders");
-      const activeClient = getActiveClientFilter();
-      const filtered = data.filter(o => HISTORY_STATUSES.has(o.status) && orderMatchesClient(o, activeClient));
+      const client = getActiveClientFilter();
+      const filtered = data.filter(o => HISTORY_STATUSES.has(o.status) && orderMatchesClient(o, client));
       state.history.all = filtered;
       state.history.filtered = [...filtered];
       renderHistory();
